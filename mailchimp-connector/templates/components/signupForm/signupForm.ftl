@@ -6,7 +6,7 @@
 [#else]
     [#if cmsfn.editMode]
         <div class="editor-warning-note">
-            <b>--- Failed to locate list and/or list form subscribe URL ---</b>
+            <strong>--- Failed to locate list and/or list form subscribe URL ---</strong>
         </div>
     [/#if]
 [/#if]
