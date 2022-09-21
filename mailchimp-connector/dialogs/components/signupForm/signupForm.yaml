@@ -1,10 +1,10 @@
-label: "Mailchimp List Signup Form"
+label: signupForm.dialog.label
 
 form:
   properties:
     listSubscribeUrl:
-      label: "Select List"
-      description: "Select a list from all available lists in your Mailchimp account. The list default signup form will be embedded."
+      label: signupForm.dialog.list.select.label
+      description: signupForm.dialog.list.select.description
       $type: jsonComboBoxField
       required: true
       datasource:

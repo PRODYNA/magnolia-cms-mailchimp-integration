@@ -8,19 +8,19 @@ securitySchemes:
 
 restCalls:
   getLists:
-    path: ''
+    path: ""
     method: GET
     entityClass: com.fasterxml.jackson.databind.JsonNode
     securityScheme: mailchimpApiAuthorization
 
   getListById:
-    path: '/{id}'
+    path: "/{id}"
     method: GET
     entityClass: com.fasterxml.jackson.databind.JsonNode
     securityScheme: mailchimpApiAuthorization
 
   getListSignupFormsById:
-    path: '/{id}/signup-forms'
+    path: "/{id}/signup-forms"
     method: GET
     entityClass: com.fasterxml.jackson.databind.JsonNode
     securityScheme: mailchimpApiAuthorization
