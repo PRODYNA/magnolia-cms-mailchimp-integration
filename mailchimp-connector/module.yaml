@@ -1,0 +1,6 @@
+version: 1.0.0
+dependencies:
+  core:
+    # Required for environmental variables
+    # Ref: https://docs.magnolia-cms.com/product-docs/6.2/Administration/Architecture/Configuration-management.html#_environment_variables
+    version: 6.2.9/*

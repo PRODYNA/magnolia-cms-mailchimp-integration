@@ -1,0 +1,26 @@
+baseUrl: !env https://${MAILCHIMP_SERVER_PREFIX}.api.mailchimp.com/3.0/lists/
+name: Mailchimp List API Resource
+securitySchemes:
+  mailchimpApiAuthorization:
+    $type: basic
+    username: !env ${MAILCHIMP_USERNAME}
+    password: !env ${MAILCHIMP_API_KEY}
+
+restCalls:
+  getLists:
+    path: ''
+    method: GET
+    entityClass: com.fasterxml.jackson.databind.JsonNode
+    securityScheme:   mailchimpApiAuthorization
+
+  getListById:
+    path: '/{id}'
+    method: GET
+    entityClass: com.fasterxml.jackson.databind.JsonNode
+    securityScheme: mailchimpApiAuthorization
+
+  getListSignupFormsById:
+    path: '/{id}/signup-forms'
+    method: GET
+    entityClass: com.fasterxml.jackson.databind.JsonNode
+    securityScheme:   mailchimpApiAuthorization

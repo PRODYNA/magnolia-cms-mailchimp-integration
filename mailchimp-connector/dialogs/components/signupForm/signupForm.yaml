@@ -1,0 +1,18 @@
+label: Mailchimp List Signup Form
+
+form:
+  properties:
+    listSubscribeUrl:
+      label: Select List
+      description: Select a list from all available lists in your Mailchimp account. The list default signup form will be embedded.
+      $type: jsonComboBoxField
+      required: true
+      datasource:
+        name: rest
+        $type: jsonDatasource
+        restClient: 'Mailchimp List API Resource'
+        restCall: getLists
+        jsonPathExpressions:
+          itemId: '$.subscribe_url_long'
+          items: '$.lists[*]'
+          describeBy: '$.name'
