@@ -1,0 +1,18 @@
+label: signupForm.dialog.label
+
+form:
+  properties:
+    listSubscribeUrl:
+      label: signupForm.dialog.list.select.label
+      description: signupForm.dialog.list.select.description
+      $type: jsonComboBoxField
+      required: true
+      datasource:
+        name: rest
+        $type: jsonDatasource
+        restClient: "Mailchimp List API Resource"
+        restCall: getLists
+        jsonPathExpressions:
+          itemId: "$.subscribe_url_long"
+          items: "$.lists[*]"
+          describeBy: "$.name"
