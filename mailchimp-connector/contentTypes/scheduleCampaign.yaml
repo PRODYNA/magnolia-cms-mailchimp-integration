@@ -1,0 +1,13 @@
+datasource:
+  workspace: scheduleCampaign
+  rootPath: /
+  namespaces:
+    sch: https://www.magnolia-travel.com/jcr/1.0/sch
+  autoCreate: true
+
+model:
+  nodeType: sch:scheduleCampaign
+  properties:
+    - name: id
+    - name: schedule_time
+      type: date
