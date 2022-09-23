@@ -1,0 +1,23 @@
+baseUrl: https://{api_server}.api.mailchimp.com/3.0
+
+cacheConfiguration:
+  expireIn: 60
+
+restCalls:
+
+  campaigns:
+    path: '/campaigns'
+    method: get
+    entityClass: com.fasterxml.jackson.databind.JsonNode 
+    headers:
+      Authorization: --
+      Accept: application/json
+    
+  campaign:
+    path: 'campaigns/{id}'
+    method: get
+    entityClass: com.fasterxml.jackson.databind.JsonNode 
+    headers:
+      Authorization: --
+      Accept: application/json
+    
