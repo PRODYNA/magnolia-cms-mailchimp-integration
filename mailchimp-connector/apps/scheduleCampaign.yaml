@@ -6,10 +6,7 @@ subApps:
   browser:
     label: Schedule Campaigns Browser
 
-
-
     actionbar:
-      defaultAction: scheduleMailchimpCampaignAction
       sections:
         - name: item
           label: Schedule Campaign
