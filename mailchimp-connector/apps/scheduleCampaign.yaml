@@ -4,11 +4,15 @@ label: Schedule Campaigns
 
 subApps:
   browser:
+    label: Schedule Campaigns Browser
+
+
+
     actionbar:
       defaultAction: scheduleMailchimpCampaignAction
-      # label: Product
       sections:
-        - name: product
+        - name: item
+          label: Schedule Campaign
           groups:
             - name: editActions
               items:
@@ -21,8 +25,7 @@ subApps:
         $type: jsAction
         modelPath: /mailchimp-connector/templates/js/scheduleMailchimpCampaignAction.js
         label: Schedule Campaign
-#        appName: scheduleCampaign-app
-#        subAppName: scheduleCampaign
+        icon: icon-mail-setting
 
   detail:
     label: Schedule Campaign
@@ -44,101 +47,3 @@ subApps:
           label: Schedule Time
           $type: dateField
           time: true
-#    actionbar:
-#      # label: Product
-#      sections:
-#        article:
-#          label: Schedule Campaign
-#          groups:
-#            view:
-#              items:
-#                - name: scheduleMailchimpCampaignAction
-#
-#    actions:
-#      actions:
-#        close:
-#          class: info.magnolia.editor.action.CloseContentEditorActionDefinition
-#        save:
-#          class: info.magnolia.editor.action.SaveContentActionDefinition
-#        scheduleMailchimpCampaignAction:
-#          $type: jsAction
-#          modelPath: /mailchimp-connector/templates/js/scheduleMailchimpCampaignAction.js
-#          label: Schedule Campaign
-#          appName: scheduleCampaign-app
-#          subAppName: scheduleCampaign
-#    actions:
-#      viewCampaign:
-#        $type: openDetailSubappAction
-#        label: View
-#        icon: icon-view
-#        appName: mailchimpCampaigns
-#        subAppName: view
-#        viewType: edit
-  #      prepareScheduleCampaign:
-  #        $type: openDetailSubappAction
-  #        label: View
-  #        icon: icon-view
-  #        appName: mailchimpCampaigns
-  #        subAppName: scheduleCampaign
-  #        viewType: edit
-
-#  view:
-#    label: View Campaign
-#    class: info.magnolia.ui.contentapp.detail.DetailDescriptor
-#
-#    datasource:
-#      $type: jsonDatasource
-#      restClient: mailchimpCampaigns
-#      restCall: campaign
-#      jsonPathExpressions:
-#        properties:
-#          id: $.id
-#          title: $.settings.title
-#          updatedAt: $.create_time
-#
-
-#    itemProvider:
-#      $type: jsonProvider
-#    form:
-#      properties:
-#        id:
-#          label: ID
-#          $type: textField
-#          readOnly: true
-#        title:
-#          label: Title
-#          $type: textField
-#          readOnly: true
-#        updatedAt:
-#          label: Last Modified
-#          $type: dateField
-#          readOnly: true
-#  scheduleCampaign:
-#    label: Schedule Campaign
-#    class: info.magnolia.ui.contentapp.detail.DetailDescriptor
-#
-#    datasource:
-#      $type: jsonDatasource
-#      restClient: mailchimpCampaigns
-#      restCall: campaign
-#      jsonPathExpressions:
-#        properties:
-#          id: $.id
-#          title: $.settings.title
-#          updatedAt: $.create_time
-#    itemProvider:
-#        $type: jsonProvider
-#    form:
-#      properties:
-#        id:
-#          label: ID
-#          $type: textField
-#        title:
-#          label: Title
-#          $type: textField
-#          readOnly: true
-#        scheduleAt:
-#          label: Schedule At
-#          required: true
-#          $type: dateField
-#          time: true
