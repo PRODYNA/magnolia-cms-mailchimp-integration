@@ -3,10 +3,11 @@ baseUrl: !env https://${MAILCHIMP_SERVER_PREFIX}.api.mailchimp.com/3.0
 cacheConfiguration:
   expireIn: 60
 
-#mailchimpApiAuthorization:
-#  $type: basic
-#  username: !env ${MAILCHIMP_USERNAME}
-#  password: !env ${MAILCHIMP_API_KEY}
+securitySchemes:
+  mailchimpApiAuthorization:
+    $type: basic
+    username: !env ${MAILCHIMP_USERNAME}
+    password: !env ${MAILCHIMP_API_KEY}
 
 
 restCalls:
@@ -14,19 +15,16 @@ restCalls:
     path: '/campaigns'
     method: get
     entityClass: com.fasterxml.jackson.databind.JsonNode
-    headers:
-      Authorization: !env ${MAILCHIMP_BASIC_AUTH}
-      
+    securityScheme: mailchimpApiAuthorization
+  
   campaign:
     path: '/campaigns/{id}'
     method: get
     entityClass: com.fasterxml.jackson.databind.JsonNode
-    headers:
-      Authorization: !env ${MAILCHIMP_BASIC_AUTH}
+    securityScheme: mailchimpApiAuthorization
 
   scheduleCampaign:
     path: '/campaigns/{id}/actions/schedule'
     method: post
     body: '{"schedule_time": "{schedule_time}"}'
-    headers:
-      Authorization: !env ${MAILCHIMP_BASIC_AUTH}
+    securityScheme: mailchimpApiAuthorization
