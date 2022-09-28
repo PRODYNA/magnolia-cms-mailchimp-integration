@@ -1,0 +1,25 @@
+datasource:
+  workspace: mailchimpCampaign
+  rootPath: /
+  namespaces:
+    sch: https://www.magnolia-travel.com/jcr/1.0/sch
+  autoCreate: true
+
+model:
+  nodeType: sch:mailchimpCampaign
+  properties:
+    - name: id
+    - name: type
+    - name: recipients
+    - name: settings
+    - name: content
+  subModels:
+    - name: recipients
+      properties:
+        - name: list_id
+    - name: settings
+      properties:
+        - name: from_name
+        - name: subject_line
+        - name: to_name
+        - name: title
