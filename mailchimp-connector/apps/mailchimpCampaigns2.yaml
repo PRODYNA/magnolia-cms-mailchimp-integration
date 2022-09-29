@@ -6,18 +6,18 @@ class: info.magnolia.ui.contentapp.configuration.ContentAppDescriptor
 label: Mailchimp Campaigns 2
 
 subApps:
-  browser:
-    label: Mailchimp
+  campaigns:
+    label: Mailchimp Campaigns
     class: info.magnolia.ui.contentapp.configuration.BrowserDescriptor
-
+    subAppClass: info.magnolia.ui.contentapp.ContentBrowserSubApp
+    closable: false
     datasource:
-      $type: jsonDatasource
-      restClient: mailchimpCampaigns
-      restCall: campaigns
-      jsonPathExpressions:
-        itemId: '$.id'
-        items: '$.campaigns'
-        describeBy: '$.settings.title'
+      class: info.magnolia.ui.datasource.jcr.JcrDatasourceDefinition
+      workspace: mailchimpCampaign
+      includeProperties: true
+      allowedNodeTypes:
+        - sch:mailchimpCampaign
+
 
     workbench:
       contentViews:
@@ -49,23 +49,49 @@ subApps:
     actionbar:
       # label: Product
       sections:
-        article:
-          label: Campaign
-          groups:
-            view:
-              items:
-                - name: viewCampaign
-          #                - name: prepareScheduleCampaign
+        root:
           availability:
-            root: false
+            root: true
+          groups:
+            addActions:
+              name: addActions
+              items:
+                - name: addCampaign
+            editActions:
+              name: editActions
+              items:
+                - name: editCampaign
+                - name: addMailchimpCampaignAction
+#        item:
+#          availability:
+#            root: false
+#          groups:
+#            editActions:
+#              name: editActions
+#              items:
+#                - name: addMailchimpCampaignAction
     actions:
-      viewCampaign:
+      addCampaign:
         $type: openDetailSubappAction
-        label: View
-        icon: icon-view
+        label: Add campaign
         appName: mailchimpCampaigns2
-        subAppName: view
+        subAppName: campaignDetail
+        viewType: add
+        availability:
+          root: true
+      editCampaign:
+        $type: openDetailSubappAction
+        label: Edit Campaign
+        appName: mailchimpCampaigns2
+        subAppName: campaignDetail
         viewType: edit
+        availability:
+          nodeTypes:
+            mailchimpCampaign: sch:mailchimpCampaign
+      addMailchimpCampaignAction:
+        $type: jsAction
+        modelPath: /mailchimp-connector/templates/js/addMailchimpCampaignAction.js
+        label: Create Mailchimp Campaign
   #      prepareScheduleCampaign:
   #        $type: openDetailSubappAction
   #        label: View
@@ -74,26 +100,91 @@ subApps:
   #        subAppName: scheduleCampaign
   #        viewType: edit
 
-  view:
-    label: View Campaign
-    class: info.magnolia.ui.contentapp.detail.DetailDescriptor
-
+  schedule-campaigns:
+    label: Schedule Mailchimp campaign
+    class: info.magnolia.ui.contentapp.configuration.BrowserDescriptor
+    subAppClass: info.magnolia.ui.contentapp.ContentBrowserSubApp
+    closable: false
     datasource:
-      $type: jsonDatasource
-      restClient: mailchimpCampaigns
-      restCall: campaign
-      jsonPathExpressions:
-        properties:
-          id: $.id
-          title: $.settings.title
-          updatedAt: $.create_time
-          list_id: $.recipients.list_id
+      class: info.magnolia.ui.datasource.jcr.JcrDatasourceDefinition
+      workspace: scheduleCampaign
+      includeProperties: true
+      allowedNodeTypes:
+        - sch:scheduleCampaign
+
+#    datasource:
+#      $type: jsonDatasource
+#      restClient: mailchimpCampaigns
+#      restCall: campaigns
+#      jsonPathExpressions:
+#        itemId: '$.id'
+#        items: "$.[*]"
+#        describeBy: '$.settings.subject_line'
+    workbench:
+      contentViews:
+        - name: list
+          $type: listView
+          columns:
+            - name: id
+              label: Campaign ID
+            - name: schedule_time
+              label: Schedule Time
+
+    actionbar:
+      # label: Product
+      sections:
+        root:
+          availability:
+            root: true
+          groups:
+            addActions:
+              name: addActions
+              items:
+                - name: newScheduleCampaign
+            editActions:
+              name: editActions
+              items:
+                - name: editScheduleCampaign
+                - name: scheduleMailchimpCampaignAction
+#        item:
+#          availability:
+#            root: false
+#          groups:
+#            editActions:
+#              name: editActions
+#              items:
+#                - name: scheduleMailchimpCampaignAction
     actions:
-      cancel:
-        label: Cancel
-        $type: closeAction
+      newScheduleCampaign:
+        $type: openDetailSubappAction
+        label: Add Schedule Campaign
+        appName: mailchimpCampaigns2
+        subAppName: scheduleCampaignDetail
+        viewType: add
+        availability:
+          root: true
+      editScheduleCampaign:
+        $type: openDetailSubappAction
+        label: Edit Schedule Campaign
+        appName: mailchimpCampaigns2
+        subAppName: scheduleCampaignDetail
+        viewType: edit
+        availability:
+          nodeTypes:
+            mailchimpCampaign: sch:scheduleCampaign
+      scheduleMailchimpCampaignAction:
+        $type: jsAction
+        modelPath: /mailchimp-connector/templates/js/scheduleMailchimpCampaignAction.js
+        label: Schedule Campaign
+        icon: icon-mail-setting
+
+  campaignDetail:
+    label: Add/Edit Campaign
+    class: info.magnolia.ui.contentapp.detail.DetailDescriptor
     itemProvider:
-      $type: jsonProvider
+      class: info.magnolia.ui.editor.JcrNodeFromLocationResolutionDefinition
+      workspace: mailchimpCampaign
+      nodeType: sch:mailchimpCampaign
     form:
       properties:
         id:
@@ -112,13 +203,40 @@ subApps:
               itemId: '$.id'
               items: '$.lists'
               describeBy: '$.name'
-        title:
+        type:
           required: true
-          label: Title
+          label: Type
           $type: textField
-        updatedAt:
-          label: Last Modified
+
+
+
+
+  scheduleCampaignDetail:
+    label: Schedule Campaign
+    class: info.magnolia.ui.contentapp.detail.DetailDescriptor
+    itemProvider:
+      class: info.magnolia.ui.editor.JcrNodeFromLocationResolutionDefinition
+      workspace: scheduleCampaign
+      nodeType: sch:scheduleCampaign
+    form:
+      properties:
+        id:
+          label: Campaign
+          $type: restComboBoxField
+          datasource:
+            name: rest
+            $type: jsonDatasource
+            restClient: mailchimpCampaigns
+            restCall: campaigns
+            jsonPathExpressions:
+              itemId: '$.id'
+              items: '$.campaigns'
+              describeBy: '$.settings.title'
+        schedule_time:
+          label: Schedule Time
           $type: dateField
+          time: true
+
 #          readOnly: true
 #  scheduleCampaign:
 #    label: Schedule Campaign
