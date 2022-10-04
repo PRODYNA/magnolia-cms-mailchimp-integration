@@ -1,5 +1,5 @@
-baseUrl: !env https://${MAILCHIMP_SERVER_PREFIX}.api.mailchimp.com/3.0/lists/
-name: "Mailchimp List API Resource"
+baseUrl: !env https://${MAILCHIMP_SERVER_PREFIX}.api.mailchimp.com/3.0/
+name: "mailchimpRestClient"
 securitySchemes:
   mailchimpApiAuthorization:
     $type: basic
@@ -8,19 +8,49 @@ securitySchemes:
 
 restCalls:
   getLists:
-    path: ""
+    path: "lists"
     method: GET
     entityClass: com.fasterxml.jackson.databind.JsonNode
     securityScheme: mailchimpApiAuthorization
 
   getListById:
-    path: "/{id}"
+    path: "lists/{id}"
     method: GET
     entityClass: com.fasterxml.jackson.databind.JsonNode
     securityScheme: mailchimpApiAuthorization
 
   getListSignupFormsById:
-    path: "/{id}/signup-forms"
+    path: "lists/{id}/signup-forms"
     method: GET
     entityClass: com.fasterxml.jackson.databind.JsonNode
+    securityScheme: mailchimpApiAuthorization
+
+  getListMembers:
+    path: "lists/{id}/members"
+    method: GET
+    entityClass: com.fasterxml.jackson.databind.JsonNode
+    securityScheme: mailchimpApiAuthorization
+
+  getCampaigns:
+    path: '/campaigns'
+    method: get
+    entityClass: com.fasterxml.jackson.databind.JsonNode
+    securityScheme: mailchimpApiAuthorization
+
+  getCampaign:
+    path: "campaigns/{id}"
+    method: GET
+    entityClass: com.fasterxml.jackson.databind.JsonNode
+    securityScheme: mailchimpApiAuthorization
+
+  getContent:
+    path: "campaigns/{id}/content"
+    method: GET
+    entityClass: com.fasterxml.jackson.databind.JsonNode
+    securityScheme: mailchimpApiAuthorization
+
+  scheduleCampaign:
+    path: '/campaigns/{id}/actions/schedule'
+    method: post
+    body: '{"schedule_time": "{schedule_time}"}'
     securityScheme: mailchimpApiAuthorization

@@ -13,6 +13,7 @@ model:
     - name: recipients
     - name: settings
     - name: content
+    - name: status
   subModels:
     - name: recipients
       properties:

@@ -1,0 +1,348 @@
+#!content-type:mailchimpCampaign
+#name: mailchimpCampaigns2-app
+appClass: info.magnolia.ui.framework.app.BaseApp
+icon: icon-content-app
+class: info.magnolia.ui.contentapp.configuration.ContentAppDescriptor
+label: Mailchimp Campaigns 3
+
+subApps:
+  campaigns:
+    label: Mailchimp Campaigns
+    class: info.magnolia.ui.contentapp.configuration.BrowserDescriptor
+    subAppClass: info.magnolia.ui.contentapp.ContentBrowserSubApp
+    closable: false
+    datasource:
+      class: info.magnolia.ui.datasource.jcr.JcrDatasourceDefinition
+      workspace: mailchimpCampaign
+      includeProperties: true
+      allowedNodeTypes:
+        - sch:mailchimpCampaign
+        - mgnl:contentNode
+
+    workbench:
+      contentViews:
+
+        - name: list
+          $type: listView
+          columns: !override &columns
+            id:
+              label: ID
+            type:
+              label: type
+            title:
+              label: Title
+            subject_line:
+              label: Subject
+            from_name:
+              label: From Name
+            to_name:
+              label: To name
+            list_id:
+              label: List
+            content:
+              label: Content
+        - name: tree
+          $type: treeView
+          columns: *columns
+    actionbar:
+#      sections:
+#        root:
+#          label: Mail List
+#          availability:
+#            root: true
+#          groups:
+#            main:
+#              items:
+      sections:
+        root:
+          availability:
+            root: true
+          groups:
+            addActions:
+              name: addActions
+              items:
+                - name: addCampaign
+                - name: importCampaigns
+            editActions:
+              name: editActions
+              items:
+                - name: editCampaign
+                - name: addMailchimpCampaignAction
+#        item:
+#          availability:
+#            root: false
+#          groups:
+#            editActions:
+#              name: editActions
+#              items:
+#                - name: addMailchimpCampaignAction
+    actions:
+      importCampaigns:
+        class: info.magnolia.ui.contentapp.action.OpenDetailSubappActionDefinition
+        label: Import Campaigns
+        appName: mailchimpCampaigns3
+        subAppName: details
+        viewType: add
+        availability:
+          root: true
+          writePermissionRequired: true
+
+      addCampaign:
+        $type: openDetailSubappAction
+        label: Add campaign
+        appName: mailchimpCampaigns3
+        subAppName: campaignDetail
+        viewType: add
+        availability:
+          root: true
+      editCampaign:
+        $type: openDetailSubappAction
+        label: Edit Campaign
+        appName: mailchimpCampaigns3
+        subAppName: campaignDetail
+        viewType: edit
+        availability:
+          nodeTypes:
+            mailchimpCampaign: sch:mailchimpCampaign
+      addMailchimpCampaignAction:
+        $type: jsAction
+        modelPath: /mailchimp-connector/templates/js/addMailchimpCampaignAction.js
+        label: Create Mailchimp Campaign
+  #      prepareScheduleCampaign:
+  #        $type: openDetailSubappAction
+  #        label: View
+  #        icon: icon-view
+  #        appName: mailchimpCampaigns
+  #        subAppName: scheduleCampaign
+  #        viewType: edit
+
+  schedule-campaigns:
+    label: Schedule Mailchimp campaign
+    class: info.magnolia.ui.contentapp.configuration.BrowserDescriptor
+    subAppClass: info.magnolia.ui.contentapp.ContentBrowserSubApp
+    closable: false
+    datasource:
+      class: info.magnolia.ui.datasource.jcr.JcrDatasourceDefinition
+      workspace: scheduleCampaign
+      includeProperties: true
+      allowedNodeTypes:
+        - sch:scheduleCampaign
+
+    workbench:
+      contentViews:
+        - name: list
+          $type: listView
+          columns:
+            - name: id
+              label: Campaign ID
+            - name: schedule_time
+              label: Schedule Time
+
+    actionbar:
+      # label: Product
+      sections:
+        root:
+          availability:
+            root: true
+          groups:
+            addActions:
+              name: addActions
+              items:
+                - name: newScheduleCampaign
+            editActions:
+              name: editActions
+              items:
+                - name: editScheduleCampaign
+                - name: scheduleMailchimpCampaignAction
+    actions:
+      newScheduleCampaign:
+        $type: openDetailSubappAction
+        label: Add Schedule Campaign
+        appName: mailchimpCampaigns3
+        subAppName: scheduleCampaignDetail
+        viewType: add
+        availability:
+          root: true
+      editScheduleCampaign:
+        $type: openDetailSubappAction
+        label: Edit Schedule Campaign
+        appName: mailchimpCampaigns3
+        subAppName: scheduleCampaignDetail
+        viewType: edit
+        availability:
+          nodeTypes:
+            mailchimpCampaign: sch:scheduleCampaign
+      scheduleMailchimpCampaignAction:
+        $type: jsAction
+        modelPath: /mailchimp-connector/templates/js/scheduleMailchimpCampaignAction.js
+        label: Schedule Campaign
+        icon: icon-mail-setting
+
+  campaignDetail:
+    label: Add/Edit Campaign
+    class: info.magnolia.ui.contentapp.detail.DetailDescriptor
+    datasource:
+      $type: jcrDatasource
+      workspace: mailchimpCampaign
+      allowedNodeTypes:
+        - sch:mailchimpCampaign
+    itemProvider:
+      $type: jcrNodeFromLocationProvider
+
+    form:
+      properties:
+        list_id:
+          label: List
+          $type: restComboBoxField
+          required: true
+          datasource:
+            name: rest
+            $type: jsonDatasource
+            restClient: mailchimpRestClient
+            restCall: getLists
+            jsonPathExpressions:
+              itemId: '$.id'
+              items: '$.lists'
+              describeBy: '$.name'
+        type:
+          label: Type
+          $type: comboBoxField
+          required: true
+          datasource:
+            $type: optionListDatasource
+            options:
+              plaintext:
+                value: plaintext
+                label: PLAINTEXT
+              regular:
+                value: regular
+                label: REGULAR
+        to_name:
+          label: To
+          $type: textField
+          required: true
+        from_name:
+          label: from
+          $type: textField
+          required: true
+        subject_line:
+          label: Subject
+          $type: textField
+          required: true
+        title:
+          label: Title
+          $type: textField
+          required: true
+        content:
+          label: Content
+          $type: richTextField
+          required: true
+  scheduleCampaignDetail:
+    label: Schedule Campaign
+    class: info.magnolia.ui.contentapp.detail.DetailDescriptor
+    datasource:
+      $type: jcrDatasource
+      workspace: scheduleCampaign
+      allowedNodeTypes:
+        - sch:scheduleCampaign
+    itemProvider:
+      $type: jcrNodeFromLocationProvider
+    form:
+      properties:
+        id:
+          label: Campaign
+          $type: restComboBoxField
+          datasource:
+            name: rest
+            $type: jsonDatasource
+            restClient: mailchimpRestClient
+            restCall: getCampaigns
+            jsonPathExpressions:
+              itemId: '$.id'
+              items: '$.campaigns'
+              describeBy: '$.settings.title'
+        schedule_time:
+          label: Schedule Time
+          $type: dateField
+          time: true
+
+
+  details:
+    class: info.magnolia.ui.contentapp.detail.DetailDescriptor
+    itemProvider:
+      $type: jcrNodeFromLocationProvider
+    datasource:
+      $type: jcrDatasource
+      workspace: mailchimpCampaign
+      allowedNodeTypes:
+        - sch:mailchimpCampaign
+    actions:
+      cancel:
+        label: Cancel
+        class: info.magnolia.ui.contentapp.action.CloseActionDefinition
+      commit:
+        $type: jsAction
+        modelPath: /mailchimp-connector/backendScripts/actions/importNodes.js
+        label: Custom Sub App
+        exposedComponents:
+          restClientFactory:
+            componentClass: info.magnolia.rest.client.factory.RestClientFactory
+            name: restClientFactory
+          restClientRegistry:
+            componentClass: info.magnolia.rest.client.registry.RestClientRegistry
+            name: restClientRegistry
+        parameters:
+          workspace: mailchimpCampaign
+          restCall: getCampaigns
+          bodyProperty: campaigns
+          contentModel: sch:mailchimpCampaign
+    #      save:
+    #        label: Save
+    #        class: info.magnolia.ui.contentapp.action.CommitActionDefinition
+    form:
+      properties:
+        id:
+          $type: listSelectField
+          # --- REST CALL TO THE ../restClients/mailchimpClient.yaml - restCall: getLists
+          datasource:
+            $type: jsonDatasource
+            restClient: "mailchimpRestClient"
+            restCall: getCampaigns
+            jsonPathExpressions:
+              itemId: '$.id'
+              items: "$.campaigns[*]"
+              describeBy: '$.settings.subject_line'
+
+#          readOnly: true
+#  scheduleCampaign:
+#    label: Schedule Campaign
+#    class: info.magnolia.ui.contentapp.detail.DetailDescriptor
+#
+#    datasource:
+#      $type: jsonDatasource
+#      restClient: mailchimpCampaigns
+#      restCall: campaign
+#      jsonPathExpressions:
+#        properties:
+#          id: $.id
+#          title: $.settings.title
+#          updatedAt: $.create_time
+#      cancel:
+#        label: Cancel
+#        $type: closeAction
+#    itemProvider:
+#        $type: jsonProvider
+#    form:
+#      properties:
+#        id:
+#          label: ID
+#          $type: textField
+#        title:
+#          label: Title
+#          $type: textField
+#          readOnly: true
+#        scheduleAt:
+#          label: Schedule At
+#          required: true
+#          $type: dateField
+#          time: true
