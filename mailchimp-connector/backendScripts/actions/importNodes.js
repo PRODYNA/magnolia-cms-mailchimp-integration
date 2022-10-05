@@ -6,6 +6,10 @@ var ImportNodes = function () {
     let MgnlContext = Java.type("info.magnolia.context.MgnlContext");
     let PropertyUtil = Java.type("info.magnolia.jcr.util.PropertyUtil");
     let Node = Java.type("javax.jcr.Node");
+    let date = Java.type("java.util.Date");
+    let SimpleDateFormat = Java.type("java.text.SimpleDateFormat");
+    let DateFormat = Java.type("java.text.DateFormat");
+
     this.execute = function () {
         let restClient;
         let session = MgnlContext.getJCRSession(this.parameters.get("workspace"));
@@ -57,6 +61,19 @@ var ImportNodes = function () {
                     PropertyUtil.setProperty(settingsNode, "from_name", entity.settings.from_name);
                     PropertyUtil.setProperty(settingsNode, "to_name", entity.settings.to_name);
 
+                    console.log(entity.id);
+                    console.log("schedule_time: " + entity.send_time);
+                    let scheduleTime;
+
+                    if (entity.send_time) {
+                        let dt = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssX");
+                        scheduleTime = dt.parse(entity.send_time);
+                    }
+                    else {
+                        scheduleTime = null;
+                    }
+                    console.log(scheduleTime);
+                    PropertyUtil.setProperty(campaignNode, "schedule_time", scheduleTime);
                 });
 
             }
@@ -66,7 +83,7 @@ var ImportNodes = function () {
 
             session.save();
         } catch (err) {
-            console.log("Could not retrieve data ", err.message);
+            console.log("Could not retrieve data ", err);
         } finally {
             restClient.close();
         }

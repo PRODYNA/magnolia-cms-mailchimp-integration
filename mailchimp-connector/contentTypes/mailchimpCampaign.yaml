@@ -14,6 +14,8 @@ model:
     - name: settings
     - name: content
     - name: status
+    - name: schedule_time
+      type: Date
   subModels:
     - name: recipients
       properties:
