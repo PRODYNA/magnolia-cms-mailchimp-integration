@@ -177,7 +177,7 @@ subApps:
         $type: openDetailSubappAction
         label: Import Audience
         appName: mailchimp
-        subAppName: listImport
+        subAppName: importAudience
         viewType: edit
         icon: icon-mail-setting
         availability:
@@ -214,8 +214,8 @@ subApps:
           nodeTypes:
             mailchimp: mlchmp:list
 
-  listImport:
-    label: Import To List
+  importAudience:
+    label: Import Audience
     class: info.magnolia.ui.contentapp.configuration.BrowserDescriptor
     closable: true
     datasource:
@@ -242,19 +242,29 @@ subApps:
     actionbar:
       sections:
         root:
-          label: Mail List
-          availability:
-            root: true
           groups:
             main:
               items:
                 - name: linkFileToList
+          availability:
+            root: true
+            nodes: false
+        node:
+          groups:
+            main:
+              label: Execute
+              items:
                 - name: batchSubscribe
+          availability:
+            root: false
+            nodes: true
+            nodeTypes:
+              - mlchmp:audience-csv
 
     actions:
       linkFileToList:
         $type: openDetailSubappAction
-        label: Subscribe Email (Subapp)
+        label: Create Import Audience Job (CSV)
         appName: mailchimp
         subAppName: linkFileToListSubApp
         icon: icon-add-item
@@ -274,13 +284,21 @@ subApps:
             csvList: mlchmp:audience-csv
 
   linkFileToListSubApp:
+    label: Create Import Audience Job
+    class: info.magnolia.ui.contentapp.detail.DetailDescriptor
+    closable: true
+    datasource:
+      class: info.magnolia.ui.datasource.jcr.JcrDatasourceDefinition
+      workspace: mailchimp
+      includeProperties: true
+      allowedNodeTypes:
+        - mlchmp:audience-csv
+
     actions:
       commit:
         $type: commitAction
       cancel:
         $type: closeAction
-    label: Subscribe Email (Subapp)
-    class: info.magnolia.ui.contentapp.detail.DetailDescriptor
     itemProvider:
       $type: jcrNodeFromLocationProvider
       nodeType: mlchmp:audience-csv
