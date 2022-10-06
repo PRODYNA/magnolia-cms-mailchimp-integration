@@ -1,0 +1,13 @@
+datasource:
+  workspace: mailchimp
+  rootPath: /
+  namespaces:
+    mlchmp: https://www.magnolia-travel.com/jcr/1.0/mlchmp
+  autoCreate: true
+
+model:
+  nodeType: mlchmp:campaign-schedule
+  properties:
+    - name: id
+    - name: schedule_time
+      type: date
