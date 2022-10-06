@@ -1,0 +1,13 @@
+datasource:
+  workspace: mailchimp
+  rootPath: /
+  namespaces:
+    mlchmp: https://www.magnolia-travel.com/jcr/1.0/mlchmp
+  autoCreate: true
+
+model:
+  nodeType: mlchmp:list
+  properties:
+    - name: id
+    - name: name
+    - name: members

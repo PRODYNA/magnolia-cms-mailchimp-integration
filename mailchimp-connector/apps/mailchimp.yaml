@@ -1,0 +1,399 @@
+#!content-type:audience-csv
+#!content-type:campaign
+#!content-type:list
+appClass: info.magnolia.ui.framework.app.BaseApp
+icon: icon-content-app
+class: info.magnolia.ui.contentapp.configuration.ContentAppDescriptor
+label: Mailchimp
+
+subApps:
+  campaigns:
+    label: Campaigns
+    class: info.magnolia.ui.contentapp.configuration.BrowserDescriptor
+    subAppClass: info.magnolia.ui.contentapp.ContentBrowserSubApp
+    closable: false
+    datasource:
+      class: info.magnolia.ui.datasource.jcr.JcrDatasourceDefinition
+      workspace: mailchimp
+      includeProperties: true
+      allowedNodeTypes:
+        - mlchmp:campaign
+
+    workbench:
+      contentViews:
+        - name: list
+          $type: listView
+          columns: !override &columns
+            id:
+              label: ID
+            title:
+              label: Title
+              $type: jsColumn
+              modelPath: /mailchimp-connector/backendScripts/valueProviders/childNodeColumn.js
+              parameters:
+                path: settings/title
+            list_id:
+              label: List
+              $type: jsColumn
+              modelPath: /mailchimp-connector/backendScripts/valueProviders/childNodeColumn.js
+              parameters:
+                path: recipients/list_id
+            status:
+              label: Status
+
+    actionbar:
+      sections:
+        root:
+          availability:
+            root: true
+          groups:
+            importActions:
+              name: importActions
+              items:
+                - name: importCampaigns
+            addActions:
+              name: addActions
+              items:
+                - name: addCampaign
+                - name: editCampaign
+                - name: deleteCampaign
+            campaignActions:
+              name: campaignActions
+              items:
+                - name: scheduleCampaign
+
+    actions:
+      importCampaigns:
+        class: info.magnolia.ui.contentapp.action.OpenDetailSubappActionDefinition
+        label: Import Campaigns From Mailchimp
+        appName: mailchimp
+        subAppName: importCampaigns
+        viewType: add
+        availability:
+          root: true
+          nodes: false
+
+      # TODO
+      addCampaign:
+        $type: openDetailSubappAction
+        label: Add
+        appName: mailchimp
+        subAppName: campaignDetail
+        viewType: add
+        availability:
+          root: true
+          nodes: false
+      # TODO
+      editCampaign:
+        $type: openDetailSubappAction
+        label: Edit
+        appName: mailchimp
+        subAppName: campaignDetail
+        viewType: edit
+        availability:
+          nodeTypes:
+            mailchimp: mlchmp:campaign
+      # TODO
+      deleteCampaign:
+        $type: openDetailSubappAction
+        label: Delete
+        appName: mailchimp
+        subAppName: campaignDetail
+        viewType: delete
+        availability:
+          nodeTypes:
+            mailchimp: mlchmp:campaign
+
+      scheduleCampaign:
+        $type: openDetailSubappAction
+        label: Schedule
+        appName: mailchimp
+        subAppName: scheduleCampaignDetail
+        viewType: edit
+        availability:
+          nodeTypes:
+            mailchimp: mlchmp:campaign
+
+      addMailchimpCampaignAction:
+        $type: jsAction
+        modelPath: /mailchimp-connector/templates/js/addMailchimpCampaignAction.js
+        label: Create Mailchimp Campaign
+
+  lists:
+    label: Lists
+    class: info.magnolia.ui.contentapp.configuration.BrowserDescriptor
+    subAppClass: info.magnolia.ui.contentapp.ContentBrowserSubApp
+    closable: false
+    datasource:
+      class: info.magnolia.ui.datasource.jcr.JcrDatasourceDefinition
+      workspace: mailchimp
+      includeProperties: true
+      allowedNodeTypes:
+        - mlchmp:list
+
+    workbench:
+      contentViews:
+        - name: list
+          $type: listView
+          columns: !override &columns
+            id:
+              label: ID
+            name:
+              label: List Name
+            members:
+              label: Members
+    actionbar:
+      sections:
+        root:
+          availability:
+            root: true
+          groups:
+            importActions:
+              name: importActions
+              items:
+                - name: importLists
+            addActions:
+              name: addActions
+              items:
+                - name: addList
+                - name: editList
+                - name: deleteList
+            listActions:
+              name: listActions
+              items:
+                - name: importAudience
+
+    actions:
+      importLists:
+        class: info.magnolia.ui.contentapp.action.OpenDetailSubappActionDefinition
+        label: Import Lists from Mailchimp
+        appName: mailchimp
+        subAppName: importLists
+        viewType: add
+        availability:
+          root: true
+          nodes: false
+      importAudience:
+        $type: openDetailSubappAction
+        label: Import Audience
+        appName: mailchimp
+        subAppName: listImport
+        viewType: edit
+        icon: icon-mail-setting
+        availability:
+          root: true
+          nodes: false
+      # TODO
+      addList:
+        $type: openDetailSubappAction
+        label: Add
+        appName: mailchimp
+        subAppName: listDetail
+        viewType: add
+        availability:
+          root: true
+          nodes: false
+      # TODO
+      editList:
+        $type: openDetailSubappAction
+        label: Edit
+        appName: mailchimp
+        subAppName: listDetail
+        viewType: edit
+        availability:
+          nodeTypes:
+            mailchimp: mlchmp:list
+      # TODO
+      deleteList:
+        $type: openDetailSubappAction
+        label: Delete
+        appName: mailchimp
+        subAppName: listDetail
+        viewType: delete
+        availability:
+          nodeTypes:
+            mailchimp: mlchmp:list
+
+  listImport:
+    label: Import To List
+    class: info.magnolia.ui.contentapp.configuration.BrowserDescriptor
+    closable: true
+    datasource:
+      class: info.magnolia.ui.datasource.jcr.JcrDatasourceDefinition
+      workspace: mailchimp
+      includeProperties: true
+      allowedNodeTypes:
+        - mlchmp:audience-csv
+    workbench:
+      contentViews:
+        - name: list
+          $type: listView
+          columns:
+            - name: jcrName
+              label: Name
+            - name: list
+              label: List Id
+            - name: csvDoc
+              label: CSV Id
+              $type: jsColumn
+              modelPath: /mailchimp-connector/backendScripts/valueProviders/csvColumn.js
+            - name: status
+              label: Status
+    actionbar:
+      sections:
+        root:
+          label: Mail List
+          availability:
+            root: true
+          groups:
+            main:
+              items:
+                - name: linkFileToList
+                - name: batchSubscribe
+
+    actions:
+      linkFileToList:
+        $type: openDetailSubappAction
+        label: Subscribe Email (Subapp)
+        appName: mailchimp
+        subAppName: linkFileToListSubApp
+        icon: icon-add-item
+        viewType: add
+        populate: false
+        availability:
+          nodes: false
+          root: true
+      batchSubscribe:
+        $type: jsAction
+        modelPath: /mailchimp-connector/backendScripts/actions/batchSubscribe.js
+        label: Execute Batch Subscribe
+        icon: icon-mail-setting
+        availability:
+          root: false
+          nodeTypes:
+            csvList: mlchmp:audience-csv
+
+  linkFileToListSubApp:
+    actions:
+      commit:
+        $type: commitAction
+      cancel:
+        $type: closeAction
+    label: Subscribe Email (Subapp)
+    class: info.magnolia.ui.contentapp.detail.DetailDescriptor
+    itemProvider:
+      $type: jcrNodeFromLocationProvider
+      nodeType: mlchmp:audience-csv
+    form:
+      properties:
+        jcrName:
+          $type: textField
+        list:
+          label: List
+          $type: jsonComboBoxField
+          datasource:
+            name: rest
+            $type: jsonDatasource
+            restClient: mailchimpRestClient
+            restCall: getLists
+            jsonPathExpressions:
+              itemId: '$.id'
+              items: "$.lists[*]"
+              describeBy: '$.name'
+              properties:
+
+        csvDoc:
+          $type: damLinkField
+          label: CSV Document
+          placeholder: Subscribers File Placeholder
+          buttonSelectNewLabel: New
+          textInputAllowed: true
+
+  importCampaigns:
+    class: info.magnolia.ui.contentapp.detail.DetailDescriptor
+    itemProvider:
+      $type: jcrNodeFromLocationProvider
+    datasource:
+      $type: jcrDatasource
+      workspace: mailchimp
+      allowedNodeTypes:
+        - mlchmp:campaign
+    actions:
+      cancel:
+        label: Cancel
+        class: info.magnolia.ui.contentapp.action.CloseActionDefinition
+      commit:
+        $type: jsAction
+        modelPath: /mailchimp-connector/backendScripts/actions/importNodes.js
+        label: Custom Sub App
+        exposedComponents:
+          restClientFactory:
+            componentClass: info.magnolia.rest.client.factory.RestClientFactory
+            name: restClientFactory
+          restClientRegistry:
+            componentClass: info.magnolia.rest.client.registry.RestClientRegistry
+            name: restClientRegistry
+        parameters:
+          workspace: mailchimp
+          restCall: getCampaigns
+          bodyProperty: campaigns
+          contentModel: mlchmp:campaign
+    #      save:
+    #        label: Save
+    #        class: info.magnolia.ui.contentapp.action.CommitActionDefinition
+    form:
+      properties:
+        id:
+          $type: listSelectField
+          # --- REST CALL TO THE ../restClients/mailchimpClient.yaml - restCall: getLists
+          datasource:
+            $type: jsonDatasource
+            restClient: mailchimpRestClient
+            restCall: getCampaigns
+            jsonPathExpressions:
+              itemId: '$.id'
+              items: "$.campaigns[*]"
+              describeBy: '$.settings.subject_line'
+
+  importLists:
+    class: info.magnolia.ui.contentapp.detail.DetailDescriptor
+    itemProvider:
+      $type: jcrNodeFromLocationProvider
+    datasource:
+      $type: jcrDatasource
+      workspace: mailchimp
+      allowedNodeTypes:
+        - mlchmp:list
+    actions:
+      cancel:
+        label: Cancel
+        class: info.magnolia.ui.contentapp.action.CloseActionDefinition
+      commit:
+        $type: jsAction
+        modelPath: /mailchimp-connector/backendScripts/actions/importNodes.js
+        label: Custom Sub App
+        exposedComponents:
+          restClientFactory:
+            componentClass: info.magnolia.rest.client.factory.RestClientFactory
+            name: restClientFactory
+          restClientRegistry:
+            componentClass: info.magnolia.rest.client.registry.RestClientRegistry
+            name: restClientRegistry
+        parameters:
+          workspace: mailchimp
+          restCall: getLists
+          bodyProperty: lists
+          contentModel: mlchmp:list
+    form:
+      properties:
+        id:
+          $type: listSelectField
+          # --- REST CALL TO THE ../restClients/mailchimpClient.yaml - restCall: getLists
+          datasource:
+            $type: jsonDatasource
+            restClient: mailchimpRestClient
+            restCall: getLists
+            jsonPathExpressions:
+              itemId: '$.id'
+              items: "$.lists[*]"
+              describeBy: '$.name'

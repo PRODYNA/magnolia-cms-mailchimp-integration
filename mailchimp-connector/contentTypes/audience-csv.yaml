@@ -1,0 +1,14 @@
+datasource:
+  $type: jcrDatasource
+  workspace: mailchimp
+  autoCreate: true
+  namespaces:
+    mlchmp: https://www.magnolia-travel.com/jcr/1.0/mlchmp
+
+model:
+  nodeType: mlchmp:audience-csv
+  properties:
+    - name: jcrName
+    - name: list
+    - name: csvDoc
+    - name: status
