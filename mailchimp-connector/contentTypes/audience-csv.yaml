@@ -3,7 +3,7 @@ datasource:
   workspace: mailchimp
   autoCreate: true
   namespaces:
-    mlchmp: https://www.magnolia-travel.com/jcr/1.0/mlchmp
+    mlchmp: https://www.prodyna.com/jcr/1.0/mlchmp
 
 model:
   nodeType: mlchmp:audience-csv
