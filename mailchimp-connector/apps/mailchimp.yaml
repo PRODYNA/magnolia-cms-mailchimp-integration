@@ -26,20 +26,48 @@ subApps:
           columns: !override &columns
             id:
               label: ID
+            type:
+              label: type
             title:
               label: Title
               $type: jsColumn
               modelPath: /mailchimp-connector/backendScripts/valueProviders/childNodeColumn.js
               parameters:
-                path: settings/title
+                path: settings
+                property: title
+            subject_line:
+              label: Subject
+              $type: jsColumn
+              modelPath: /mailchimp-connector/backendScripts/valueProviders/childNodeColumn.js
+              parameters:
+                path: settings
+                property: subject_line
+            from_name:
+              label: From Name
+              $type: jsColumn
+              modelPath: /mailchimp-connector/backendScripts/valueProviders/childNodeColumn.js
+              parameters:
+                path: settings
+                property: from_name
+            to_name:
+              label: To name
+              $type: jsColumn
+              modelPath: /mailchimp-connector/backendScripts/valueProviders/childNodeColumn.js
+              parameters:
+                path: settings
+                property: to_name
             list_id:
               label: List
               $type: jsColumn
               modelPath: /mailchimp-connector/backendScripts/valueProviders/childNodeColumn.js
               parameters:
-                path: recipients/list_id
+                path: recipients
+                property: list_id
             status:
               label: Status
+        - name: tree
+          $type: treeView
+          columns: *columns
 
     actionbar:
       sections:
@@ -57,6 +85,10 @@ subApps:
                 - name: addCampaign
                 - name: editCampaign
                 - name: deleteCampaign
+            publicationActions:
+              name: publicationActions
+              items:
+                - name: publishCampaign
             campaignActions:
               name: campaignActions
               items:
@@ -95,29 +127,75 @@ subApps:
             mailchimp: mlchmp:campaign
       # TODO
       deleteCampaign:
-        $type: openDetailSubappAction
+        $type: jsAction
+        modelPath: /mailchimp-connector/backendScripts/actions/deleteNode.js
         label: Delete
-        appName: mailchimp
-        subAppName: campaignDetail
-        viewType: delete
         availability:
           nodeTypes:
             mailchimp: mlchmp:campaign
+        exposedComponents:
+          restClientFactory:
+            componentClass: info.magnolia.rest.client.factory.RestClientFactory
+            name: restClientFactory
+          restClientRegistry:
+            componentClass: info.magnolia.rest.client.registry.RestClientRegistry
+            name: restClientRegistry
+        parameters:
+          workspace: mailchimp
+          restCall: deleteCampaign
+          contentModel: mlchmp:campaign
+
+#      deleteCampaign:
+#        $type: jsAction
+#        modelPath: /mailchimp-connector/backendScripts/actions/deleteMailchimpCampaignAction.js
+#        label: Delete Campaign
+#        availability:
+#          nodeTypes:
+#            mailchimp: mlchmp:campaign
+#        exposedComponents:
+#          restClientFactory:
+#            componentClass: info.magnolia.rest.client.factory.RestClientFactory
+#            name: restClientFactory
+#          restClientRegistry:
+#            componentClass: info.magnolia.rest.client.registry.RestClientRegistry
+#            name: restClientRegistry
+#        parameters:
+#          workspace: mailchimp
+#          restCall: deleteCampaign
+#          contentModel: mlchmp:campaign
+
+      publishCampaign:
+        $type: jsAction
+        modelPath: /mailchimp-connector/backendScripts/actions/publishMailchimpCampaignAction.js
+        label: Send to Mailchimp
+        availability:
+          nodeTypes:
+            mailchimp: mlchmp:campaign
+        exposedComponents:
+          restClientFactory:
+            componentClass: info.magnolia.rest.client.factory.RestClientFactory
+            name: restClientFactory
+          restClientRegistry:
+            componentClass: info.magnolia.rest.client.registry.RestClientRegistry
+            name: restClientRegistry
+        parameters:
+          workspace: mailchimp
+          contentModel: mlchmp:campaign
 
       scheduleCampaign:
         $type: openDetailSubappAction
-        label: Schedule
+        label: Schedule Campaign
         appName: mailchimp
         subAppName: scheduleCampaignDetail
         viewType: edit
         availability:
           nodeTypes:
             mailchimp: mlchmp:campaign
+          rules:
+            - name: jcrPublishedRule
+              $type: jcrPublishedRule
 
-      addMailchimpCampaignAction:
-        $type: jsAction
-        modelPath: /mailchimp-connector/templates/js/addMailchimpCampaignAction.js
-        label: Create Mailchimp Campaign
+
 
   lists:
     label: Lists
@@ -526,6 +604,78 @@ subApps:
               $type: textField
               required: true
 
+  campaignDetail:
+    label: Add/Edit Campaign
+    class: info.magnolia.ui.contentapp.detail.DetailDescriptor
+    datasource:
+      $type: jcrDatasource
+      workspace: mailchimp
+      allowedNodeTypes:
+        - mlchmp:campaign
+    itemProvider:
+      $type: jcrNodeFromLocationProvider
+      workspace: mailchimpCampaign
+      nodeType: mlchmp:campaign
+    form:
+      properties:
+        type:
+          label: Type
+          $type: comboBoxField
+          required: true
+          datasource:
+            $type: optionListDatasource
+            options:
+              plaintext:
+                value: plaintext
+                label: PLAINTEXT
+              regular:
+                value: regular
+                label: REGULAR
+
+        recipients:
+          label: Recipients
+          $type: compositeField
+          itemProvider:
+            $type: jcrChildNodeProvider
+          properties:
+            list_id:
+              label: List
+              $type: restComboBoxField
+              required: true
+              datasource:
+                name: rest
+                $type: jsonDatasource
+                restClient: mailchimpRestClient
+                restCall: getLists
+                jsonPathExpressions:
+                  itemId: '$.id'
+                  items: '$.lists'
+                  describeBy: '$.name'
+
+        settings:
+          label: Recipients
+          $type: compositeField
+          itemProvider:
+            $type: jcrChildNodeProvider
+          properties:
+
+
+            to_name:
+              label: To
+              $type: textField
+              required: true
+            from_name:
+              label: from
+              $type: textField
+              required: true
+            subject_line:
+              label: Subject
+              $type: textField
+              required: true
+            title:
+              label: Title
+              $type: textField
+              required: true
     actions:
       cancel:
         label: Cancel
@@ -533,3 +683,41 @@ subApps:
       commit:
         $type: commitAction
         label: Save Changes
+
+  scheduleCampaignDetail:
+    label: Schedule Campaign
+    class: info.magnolia.ui.contentapp.detail.DetailDescriptor
+    datasource:
+      $type: jcrDatasource
+      workspace: mailchimp
+      allowedNodeTypes:
+        - mlchmp:campaign
+    itemProvider:
+      $type: jcrNodeFromLocationProvider
+    form:
+      properties:
+        id:
+          label: Campaign
+          $type: restComboBoxField
+          datasource:
+            name: rest
+            $type: jsonDatasource
+            restClient: mailchimpRestClient
+            restCall: getCampaigns
+            jsonPathExpressions:
+              itemId: '$.id'
+              items: '$.campaigns'
+              describeBy: '$.settings.title'
+        schedule_time:
+          $type: dateField
+          dateFormat: "yyyy-MM-dd"
+          time: true
+          timeFormat: "HH:mm:ss"
+    actions:
+      cancel:
+        label: Cancel
+        class: info.magnolia.ui.contentapp.action.CloseActionDefinition
+      commit:
+        $type: jsAction
+        modelPath: /mailchimp-connector/templates/js/scheduleMailchimpCampaignAction.js
+        label: Schedule

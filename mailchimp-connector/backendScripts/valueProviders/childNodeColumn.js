@@ -1,15 +1,14 @@
 var ChildNodeColumn = function () {
     this.apply = function(item) {
-        if (!item.isNode()) {
-            return null;
+        try {
+            if (this.parameters.containsKey('path') && this.parameters.containsKey('property')) {
+                let childNode = item.getNode(this.parameters['path']);
+
+                return childNode.getProperty(this.parameters['property']).getString();
+            }
+        } catch (err) {
+            return "";
         }
-
-
-
-        if (this.parameters.containsKey('path') && item.getDepth() == 1) {
-            return columnValue = item.getProperty(this.parameters['path']).getString();
-        }
-
 
         return "";
     }

@@ -5,38 +5,46 @@ var DeleteMailchimpCampaignAction = function () {
     let NodeUtil = utils.getNodeUtil();
     let MgnlContext = Java.type("info.magnolia.context.MgnlContext");
     let PropertyUtil = Java.type("info.magnolia.jcr.util.PropertyUtil");
-    let Node = Java.type("javax.jcr.Node");
     let Notification = Java.type("com.vaadin.ui.Notification");
     let SUCCESS_DELETION_MESSAGE = 'Campaign was successfully deleted';
-    let FAILURE_DELETION_MESSAGE = 'Campaign Deletion failed: ';
+    let FAILURE_DELETION_MESSAGE = 'Campaign Deletion from Mailchimp failed: ';
+
+    function deleteFromJCR(identifier) {
+        let session = MgnlContext.getJCRSession(this.parameters.get("workspace"));
+        NodeUtil.getNodeByIdentifier(this.parameters.get("workspace"), identifier).remove();
+        session.save();
+        Notification.show(SUCCESS_DELETION_MESSAGE, Notification.Type.HUMANIZED_MESSAGE).setDelayMsec(5000);
+    }
+
     this.execute = function () {
         console.log("execute start");
         let restClient;
-        let session = MgnlContext.getJCRSession(this.parameters.get("workspace"));
+
 
 
         try {
             restClient = utils.getRestClient("mailchimpRestClient");
+            let identifier = PropertyUtil.getString(this.content, "jcr:uuid");
             let campaignId = PropertyUtil.getString(this.content, "id");
-            let res = restClient.invoke(this.parameters.get("restCall"), {"id": campaignId});
-            let statusInfo = res.getStatusInfo();
-            if (statusInfo.getStatusCode() === 204) {
+            if (campaignId) {
+                let res = restfn.callForResponse("mailchimpRestClient", this.parameters.get("restCall"), {"id": campaignId});
+                let statusInfo = res.getStatusInfo();
+                console.log(statusInfo);
 
-                let identifier = PropertyUtil.getString(this.content, "jcr:uuid");
-                NodeUtil.getNodeByIdentifier(this.parameters.get("workspace"), identifier).remove();
-                session.save();
-                Notification.show(SUCCESS_DELETION_MESSAGE, Notification.Type.ASSISTIVE_NOTIFICATION).setDelayMsec(5000);
+                if (statusInfo.getStatusCode() === 204 || statusInfo.getStatusCode() === 404) {
+                    deleteFromJCR.call(this, identifier);
+                } else {
+                    Notification.show(FAILURE_DELETION_MESSAGE + statusInfo.getReasonPhrase(), Notification.Type.ERROR_MESSAGE).setDelayMsec(5000);
+                }
 
             } else {
-                Notification.show(FAILURE_DELETION_MESSAGE + statusInfo.getReasonPhrase(), Notification.Type.ERROR_MESSAGE).setDelayMsec(5000);
+                deleteFromJCR.call(this, identifier);
             }
 
-
-            // restfn.call("mailchimpCampaigns", "scheduleCampaign", {"id": campaign, "schedule_time": schedule_time});
             console.log("execute end");
 
         }  catch (err) {
-        console.log("Could not retrieve data ", err);
+            Notification.show(FAILURE_DELETION_MESSAGE + err, Notification.Type.ERROR_MESSAGE).setDelayMsec(5000);
         } finally {
             restClient.close();
         }

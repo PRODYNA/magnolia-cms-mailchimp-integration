@@ -79,3 +79,22 @@ restCalls:
                   }
             }'
     securityScheme: mailchimpApiAuthorization
+
+  editCampaign:
+    path: '/campaigns/{id}'
+    method: PATCH
+    entityClass: com.fasterxml.jackson.databind.JsonNode
+    body: '{ "type": "{type}",
+                  "recipients" : 
+                      {
+                        "list_id": "{list_id}"
+                      },
+                  "settings": 
+                      {
+                        "subject_line": "{subject_line}",
+                        "title": "{title}",
+                        "from_name": "{from_name}",
+                        "to_name": "{to_name}" 
+                      }
+                }'
+    securityScheme: mailchimpApiAuthorization  
