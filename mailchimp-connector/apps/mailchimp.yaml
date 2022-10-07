@@ -183,7 +183,6 @@ subApps:
         availability:
           root: true
           nodes: false
-      # TODO
       addList:
         $type: openDetailSubappAction
         label: Add
@@ -193,7 +192,6 @@ subApps:
         availability:
           root: true
           nodes: false
-      # TODO
       editList:
         $type: openDetailSubappAction
         label: Edit
@@ -203,16 +201,24 @@ subApps:
         availability:
           nodeTypes:
             mailchimp: mlchmp:list
-      # TODO
       deleteList:
-        $type: openDetailSubappAction
+        $type: jsAction
+        modelPath: /mailchimp-connector/backendScripts/actions/deleteNode.js
         label: Delete
-        appName: mailchimp
-        subAppName: listDetail
-        viewType: delete
         availability:
           nodeTypes:
             mailchimp: mlchmp:list
+        exposedComponents:
+          restClientFactory:
+            componentClass: info.magnolia.rest.client.factory.RestClientFactory
+            name: restClientFactory
+          restClientRegistry:
+            componentClass: info.magnolia.rest.client.registry.RestClientRegistry
+            name: restClientRegistry
+        parameters:
+          workspace: mailchimp
+          restCall: deleteList
+          contentModel: mlchmp:list
 
   importAudience:
     label: Import Audience
