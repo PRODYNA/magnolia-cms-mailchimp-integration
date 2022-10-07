@@ -234,7 +234,7 @@ subApps:
             - name: list
               label: List Id
             - name: csvDoc
-              label: CSV Id
+              label: CSV File Name
               $type: jsColumn
               modelPath: /mailchimp-connector/backendScripts/valueProviders/csvColumn.js
             - name: status
@@ -306,9 +306,11 @@ subApps:
       properties:
         jcrName:
           $type: textField
+          required: true
         list:
           label: List
           $type: jsonComboBoxField
+          required: true
           datasource:
             name: rest
             $type: jsonDatasource
@@ -323,6 +325,7 @@ subApps:
         csvDoc:
           $type: damLinkField
           label: CSV Document
+          required: true
           placeholder: Subscribers File Placeholder
           buttonSelectNewLabel: New
           textInputAllowed: true
