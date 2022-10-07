@@ -418,3 +418,112 @@ subApps:
               itemId: '$.id'
               items: "$.lists[*]"
               describeBy: '$.name'
+
+  listDetail:
+    label: "Add/Edit List"
+    class: info.magnolia.ui.contentapp.detail.DetailDescriptor
+    closeable: true
+    datasource:
+      $type: jcrDatasource
+      workspace: mailchimp
+      allowedNodeTypes:
+        - mlchmp:list
+    itemProvider:
+      $type: jcrNodeFromLocationProvider
+      workspace: mailchimp
+      nodeType: mlchmp:list
+    form:
+      properties:
+        name:
+          label: "Name"
+          $type: textField
+          required: true
+        email_type_option:
+          label: "User Email Format Option"
+          description: "When set to allow, subscribers can choose whether they want to receive HTML or plain-text emails. When set to not allowed, subscribers will receive HTML emails, with a plain-text alternative backup."
+          $type: comboBoxField
+          required: true
+          datasource:
+            $type: optionListDatasource
+            options:
+              plaintext:
+                value: true
+                label: "Allow User Selection"
+              regular:
+                value: false
+                label: "Disallow User Selection"
+        members:
+          label: "Contact(s)"
+          $type: textField
+          readOnly: true
+          defaultValue: "0"
+        permission_reminder:
+          label: "Permission Reminder"
+          description: "A permission reminder is a text embedded in your email campaigns that makes it clear where your recipients signed up to receive email marketing messages"
+          $type: textField
+          rows: 3
+          required: true
+        contact:
+          label: "Contact Information"
+          $type: compositeField
+          itemProvider:
+            $type: jcrChildNodeProvider
+          properties:
+            company:
+              label: "Company Name"
+              description: "The company name for the list."
+              $type: textField
+              required: true
+            address1:
+              label: "Street Address"
+              description: "The street address for the list contact."
+              $type: textField
+              required: true
+            city:
+              label: "City"
+              description: "The city for the list contact."
+              $type: textField
+              required: true
+            country:
+              label: "The country."
+              $type: textField
+              readOnly: true
+              defaultValue: "US"
+        campaign_defaults:
+          label: "Campaign Default Values"
+          $type: compositeField
+          itemProvider:
+            $type: jcrChildNodeProvider
+          properties:
+            from_name:
+              label: "From Name"
+              description: "The default from name for campaigns sent to this list."
+              $type: textField
+              required: true
+            from_email:
+              label: "From Email"
+              description: "The default from email for campaigns sent to this list."
+              $type: textField
+              required: true
+              validators:
+                from_email:
+                  $type: emailValidator
+                  errorMessage: "Invalid Email Address"
+            subject:
+              label: "Subject"
+              description: "The default subject line for campaigns sent to this list."
+              $type: textField
+              required: true
+            language:
+              label: "Language"
+              description: "The default language for this lists's forms."
+              $type: textField
+              required: true
+
+    actions:
+      cancel:
+        label: Cancel
+        $type: closeAction
+      commit:
+        $type: commitAction
+        label: Save Changes

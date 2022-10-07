@@ -11,3 +11,20 @@ model:
     - name: id
     - name: name
     - name: members
+    - name: email_type_option
+    - name: permission_reminder
+    - name: contact
+    - name: campaign_defaults
+  subModels:
+    - name: contact
+      properties:
+        - name: address1
+        - name: company
+        - name: city
+        - name: country
+    - name: campaign_defaults
+      properties:
+        - name: from_name
+        - name: from_email
+        - name: subject
+        - name: language

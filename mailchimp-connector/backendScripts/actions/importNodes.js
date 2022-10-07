@@ -49,6 +49,20 @@ var ImportListItems = function(items, session, rootNode, contentType) {
         PropertyUtil.setProperty(listNode, "id", entity.id);
         PropertyUtil.setProperty(listNode, "name", entity.name);
         PropertyUtil.setProperty(listNode, "members", entity.stats.member_count);
+        PropertyUtil.setProperty(listNode, "permission_reminder", entity.permission_reminder);
+        PropertyUtil.setProperty(listNode, "email_type_option", entity.email_type_option);
+
+        let contactNode = nodeUtil.createPath(listNode, "contact", "mgnl:contentNode");
+        PropertyUtil.setProperty(contactNode, "address1", entity.contact.address1);
+        PropertyUtil.setProperty(contactNode, "company", entity.contact.company);
+        PropertyUtil.setProperty(contactNode, "city", entity.contact.city);
+        PropertyUtil.setProperty(contactNode, "country", entity.contact.country);
+
+        let campaignDefaultsNode = nodeUtil.createPath(listNode, "campaign_defaults", "mgnl:contentNode");
+        PropertyUtil.setProperty(campaignDefaultsNode, "from_name", entity.campaign_defaults.from_name);
+        PropertyUtil.setProperty(campaignDefaultsNode, "from_email", entity.campaign_defaults.from_email);
+        PropertyUtil.setProperty(campaignDefaultsNode, "subject", entity.campaign_defaults.subject);
+        PropertyUtil.setProperty(campaignDefaultsNode, "language", entity.campaign_defaults.language);
     });
 }
 

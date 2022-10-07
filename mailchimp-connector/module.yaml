@@ -10,5 +10,3 @@ dependencies:
     version: 2.0/*
   backend-live-actions:
     version: 1.0/*
-  backend-live-common-lm:
-    version: 1.0/*
