@@ -25,4 +25,4 @@ model:
         - name: from_name
         - name: subject_line
         - name: to_name
-        - name: Τιτλος
+        - name: title

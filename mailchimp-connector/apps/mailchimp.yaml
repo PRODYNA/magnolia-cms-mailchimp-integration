@@ -4,11 +4,11 @@
 appClass: info.magnolia.ui.framework.app.BaseApp
 icon: icon-content-app
 class: info.magnolia.ui.contentapp.configuration.ContentAppDescriptor
-label: Mailchimp
+label: app.name
 
 subApps:
   campaigns:
-    label: Campaigns
+    label: subapp.campaigns.name
     class: info.magnolia.ui.contentapp.configuration.BrowserDescriptor
     subAppClass: info.magnolia.ui.contentapp.ContentBrowserSubApp
     closable: false
@@ -25,49 +25,42 @@ subApps:
           $type: listView
           columns: !override &columns
             id:
-              label: ID
+              label: "Campaign ID"
             type:
-              label: type
+              label: "Type"
             title:
-              label: Title
+              label: "Title"
               $type: jsColumn
               modelPath: /mailchimp-connector/backendScripts/valueProviders/childNodeColumn.js
               parameters:
                 path: settings
                 property: title
-            subject_line:
-              label: Subject
-              $type: jsColumn
-              modelPath: /mailchimp-connector/backendScripts/valueProviders/childNodeColumn.js
-              parameters:
-                path: settings
-                property: subject_line
-            from_name:
-              label: From Name
+            from:
+              label: "From"
               $type: jsColumn
               modelPath: /mailchimp-connector/backendScripts/valueProviders/childNodeColumn.js
               parameters:
                 path: settings
                 property: from_name
-            to_name:
-              label: To name
+            subject_line:
+              label: "Subject"
               $type: jsColumn
               modelPath: /mailchimp-connector/backendScripts/valueProviders/childNodeColumn.js
               parameters:
                 path: settings
-                property: to_name
+                property: subject_line
             list_id:
-              label: List
+              label: "List"
               $type: jsColumn
               modelPath: /mailchimp-connector/backendScripts/valueProviders/childNodeColumn.js
               parameters:
                 path: recipients
                 property: list_id
             status:
-              label: Status
-        - name: tree
-          $type: treeView
-          columns: *columns
+              label: "Mailchimp Campaign Status"
+            jcrPublishingStatus:
+              $type: jcrStatusColumn
+              width: 130
 
     actionbar:
       sections:
@@ -97,6 +90,7 @@ subApps:
     actions:
       importCampaigns:
         class: info.magnolia.ui.contentapp.action.OpenDetailSubappActionDefinition
+        icon: icon-import
         label: Import Campaigns From Mailchimp
         appName: mailchimp
         subAppName: importCampaigns
@@ -107,6 +101,7 @@ subApps:
 
       addCampaign:
         $type: openDetailSubappAction
+        icon: icon-add-item
         label: Add
         appName: mailchimp
         subAppName: campaignDetail
@@ -117,6 +112,7 @@ subApps:
 
       editCampaign:
         $type: openDetailSubappAction
+        icon: icon-edit
         label: Edit
         appName: mailchimp
         subAppName: campaignDetail
@@ -127,6 +123,7 @@ subApps:
 
       deleteCampaign:
         $type: jsAction
+        icon: icon-trash
         modelPath: /mailchimp-connector/backendScripts/actions/deleteNode.js
         label: Delete
         availability:
@@ -146,11 +143,15 @@ subApps:
 
       publishCampaign:
         $type: jsAction
-        modelPath: /mailchimp-connector/backendScripts/actions/publishMailchimpCampaignAction.js
-        label: Send to Mailchimp
+        icon: icon-publish
+        modelPath: /mailchimp-connector/backendScripts/actions/publishNode.js
+        label: "Send To Mailchimp"
         availability:
           nodeTypes:
             mailchimp: mlchmp:campaign
+          rules:
+            isPublishable: &isPublishable
+              $type: jcrPublishableRule
         exposedComponents:
           restClientFactory:
             componentClass: info.magnolia.rest.client.factory.RestClientFactory
@@ -160,10 +161,11 @@ subApps:
             name: restClientRegistry
         parameters:
           workspace: mailchimp
-          contentModel: mlchmp:campaign
+          restCallSuffix: Campaign
 
       scheduleCampaign:
         $type: openDetailSubappAction
+        icon: icon-mail-setting
         label: Schedule Campaign
         appName: mailchimp
         subAppName: scheduleCampaignDetail
@@ -171,11 +173,6 @@ subApps:
         availability:
           nodeTypes:
             mailchimp: mlchmp:campaign
-#          rules:
-#            - name: jcrPublishedRule
-#              $type: jcrPublishedRule
-
-
 
   lists:
     label: Lists
@@ -200,6 +197,9 @@ subApps:
               label: List Name
             members:
               label: Members
+            jcrPublishingStatus:
+              $type: jcrStatusColumn
+              width: 130
     actionbar:
       sections:
         root:
@@ -216,6 +216,10 @@ subApps:
                 - name: addList
                 - name: editList
                 - name: deleteList
+            publicationActions:
+              name: publicationActions
+              items:
+                - name: publishList
             listActions:
               name: listActions
               items:
@@ -225,6 +229,7 @@ subApps:
       importLists:
         class: info.magnolia.ui.contentapp.action.OpenDetailSubappActionDefinition
         label: Import Lists from Mailchimp
+        icon: icon-import
         appName: mailchimp
         subAppName: importLists
         viewType: add
@@ -243,7 +248,8 @@ subApps:
           nodes: false
       addList:
         $type: openDetailSubappAction
-        label: Add
+        label: "Add"
+        icon: icon-add-item
         appName: mailchimp
         subAppName: listDetail
         viewType: add
@@ -252,7 +258,8 @@ subApps:
           nodes: false
       editList:
         $type: openDetailSubappAction
-        label: Edit
+        label: "Edit"
+        icon: icon-edit
         appName: mailchimp
         subAppName: listDetail
         viewType: edit
@@ -262,7 +269,8 @@ subApps:
       deleteList:
         $type: jsAction
         modelPath: /mailchimp-connector/backendScripts/actions/deleteNode.js
-        label: Delete
+        label: "Delete"
+        icon: icon-trash
         availability:
           nodeTypes:
             mailchimp: mlchmp:list
@@ -277,6 +285,27 @@ subApps:
           workspace: mailchimp
           restCall: deleteList
           contentModel: mlchmp:list
+      publishList:
+        $type: jsAction
+        icon: icon-publish
+        modelPath: /mailchimp-connector/backendScripts/actions/publishNode.js
+        label: "Send To Mailchimp"
+        availability:
+          nodeTypes:
+            mailchimp: mlchmp:list
+          rules:
+            isPublishable: &isPublishable
+              $type: jcrPublishableRule
+        exposedComponents:
+          restClientFactory:
+            componentClass: info.magnolia.rest.client.factory.RestClientFactory
+            name: restClientFactory
+          restClientRegistry:
+            componentClass: info.magnolia.rest.client.registry.RestClientRegistry
+            name: restClientRegistry
+        parameters:
+          workspace: mailchimp
+          restCallSuffix: List
 
   importAudience:
     label: Import Audience
@@ -441,6 +470,7 @@ subApps:
               describeBy: '$.settings.subject_line'
 
   importLists:
+    icon: icon-import
     class: info.magnolia.ui.contentapp.detail.DetailDescriptor
     itemProvider:
       $type: jcrNodeFromLocationProvider
@@ -546,6 +576,16 @@ subApps:
             city:
               label: "City"
               description: "The city for the list contact."
+              $type: textField
+              required: true
+            zip:
+              label: "Zip"
+              description: "The postal or zip code for the list contact."
+              $type: textField
+              required: true
+            state:
+              label: "State"
+              description: "The state for the list contact."
               $type: textField
               required: true
             country:
@@ -677,7 +717,7 @@ subApps:
     form:
       properties:
         id:
-          label: Campaign
+          label: "Campaign"
           $type: restComboBoxField
           datasource:
             name: rest
@@ -689,6 +729,7 @@ subApps:
               items: '$.campaigns'
               describeBy: '$.settings.title'
         schedule_time:
+          label: "Schedule Date"
           $type: dateField
           dateFormat: "yyyy-MM-dd"
           time: true
@@ -699,5 +740,5 @@ subApps:
         class: info.magnolia.ui.contentapp.action.CloseActionDefinition
       commit:
         $type: jsAction
-        modelPath: /mailchimp-connector/templates/js/scheduleMailchimpCampaignAction.js
+        modelPath: /mailchimp-connector/backendScripts/actions/scheduleMailchimpCampaignAction.js
         label: Schedule

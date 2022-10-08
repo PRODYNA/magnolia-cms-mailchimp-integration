@@ -3,8 +3,8 @@ loadScript("/mailchimp-connector/backendScripts/utils.js");
 var ImportCampaignItems = function(items, session, rootNode, contentType) {
     let utils = new Utils();
     let nodeUtil = utils.getNodeUtil();
+    let nodeTypesUtil = utils.getNodeTypes();
     let PropertyUtil = Java.type("info.magnolia.jcr.util.PropertyUtil");
-    let SimpleDateFormat = Java.type("java.text.SimpleDateFormat");
     items.forEach(entity => {
         if(session.nodeExists("/" + entity.id)) {
             session.getItem("/" + entity.id).remove();
@@ -13,19 +13,24 @@ var ImportCampaignItems = function(items, session, rootNode, contentType) {
         PropertyUtil.setProperty(campaignNode, "id", entity.id);
         PropertyUtil.setProperty(campaignNode, "type", entity.type);
         PropertyUtil.setProperty(campaignNode, "status", entity.status);
+
         let recipientsNode = nodeUtil.createPath(campaignNode, "recipients", "mgnl:contentNode");
         PropertyUtil.setProperty(recipientsNode, "list_id", entity.recipients.list_id);
+
         let settingsNode = nodeUtil.createPath(campaignNode, "settings", "mgnl:contentNode");
         PropertyUtil.setProperty(settingsNode, "title", entity.settings.title);
         PropertyUtil.setProperty(settingsNode, "subject_line", entity.settings.subject_line);
         PropertyUtil.setProperty(settingsNode, "from_name", entity.settings.from_name);
         PropertyUtil.setProperty(settingsNode, "to_name", entity.settings.to_name);
+
+        nodeTypesUtil.Activatable.update(campaignNode, "Import", true);
     });
 }
 
 var ImportListItems = function(items, session, rootNode, contentType) {
     let utils = new Utils();
     let nodeUtil = utils.getNodeUtil();
+    let nodeTypesUtil = utils.getNodeTypes();
     let PropertyUtil = Java.type("info.magnolia.jcr.util.PropertyUtil");
     items.forEach(entity => {
         if(session.nodeExists("/" + entity.id)) {
@@ -43,12 +48,16 @@ var ImportListItems = function(items, session, rootNode, contentType) {
         PropertyUtil.setProperty(contactNode, "company", entity.contact.company);
         PropertyUtil.setProperty(contactNode, "city", entity.contact.city);
         PropertyUtil.setProperty(contactNode, "country", entity.contact.country);
+        PropertyUtil.setProperty(contactNode, "zip", entity.contact.zip);
+        PropertyUtil.setProperty(contactNode, "state", entity.contact.state);
 
         let campaignDefaultsNode = nodeUtil.createPath(listNode, "campaign_defaults", "mgnl:contentNode");
         PropertyUtil.setProperty(campaignDefaultsNode, "from_name", entity.campaign_defaults.from_name);
         PropertyUtil.setProperty(campaignDefaultsNode, "from_email", entity.campaign_defaults.from_email);
         PropertyUtil.setProperty(campaignDefaultsNode, "subject", entity.campaign_defaults.subject);
         PropertyUtil.setProperty(campaignDefaultsNode, "language", entity.campaign_defaults.language);
+
+        nodeTypesUtil.Activatable.update(listNode, "Import", true);
     });
 }
 

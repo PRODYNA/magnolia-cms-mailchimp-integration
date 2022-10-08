@@ -21,6 +21,8 @@ model:
         - name: address1
         - name: company
         - name: city
+        - name: zip
+        - name: state
         - name: country
     - name: campaign_defaults
       properties:

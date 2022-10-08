@@ -13,9 +13,10 @@ var ScheduleMailchimpCampaignAction = function () {
         console.log("execute start");
         let session = MgnlContext.getJCRSession("mailchimp");
         try {
-
             let campaign = PropertyUtil.getString(this.content, "id");
             let scheduleAt = PropertyUtil.getString(this.content, "schedule_time");
+            console.log(campaign);
+            console.log(scheduleAt);
             let schedule_time_parse = new Date(scheduleAt);
             let schedule_utc_time = Date.UTC(schedule_time_parse.getUTCFullYear(), schedule_time_parse.getUTCMonth(),
                 schedule_time_parse.getUTCDate(), schedule_time_parse.getUTCHours(),

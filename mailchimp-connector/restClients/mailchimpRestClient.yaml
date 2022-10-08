@@ -7,6 +7,34 @@ securitySchemes:
     password: !env ${MAILCHIMP_API_KEY}
 
 restCalls:
+
+  addList:
+    path: "lists"
+    method: POST
+    entityClass: com.fasterxml.jackson.databind.JsonNode
+    body: '
+            {
+               "name": "{name}",
+               "contact" : {
+                  "company" : "{company}",
+                  "address1" : "{address1}",
+                  "city" : "{city}",
+                  "country" : "{country}",
+                  "zip" : "{zip}",
+                  "state" : "{state}"
+               },
+               "permission_reminder" : "{permission_reminder}",
+               "campaign_defaults" : {
+                  "from_name" : "{from_name}",
+                  "from_email" : "{from_email}",
+                  "subject" : "{subject}",
+                  "language" : "{language}"
+               },
+               "email_type_option" : {email_type_option}
+            }
+          '
+    securityScheme: mailchimpApiAuthorization
+
   getLists:
     path: "lists"
     method: GET
@@ -36,9 +64,20 @@ restCalls:
     method: DELETE
     securityScheme: mailchimpApiAuthorization
 
+  batchSubscribeToList:
+    method: POST
+    entityClass: com.fasterxml.jackson.databind.JsonNode
+    securityScheme: mailchimpApiAuthorization
+    path: "lists/{listId}"
+    body: '
+            {
+               "members": {members}
+            }
+          '
+
   getCampaigns:
-    path: 'campaigns'
-    method: get
+    path: "campaigns"
+    method: GET
     entityClass: com.fasterxml.jackson.databind.JsonNode
     securityScheme: mailchimpApiAuthorization
 
@@ -55,36 +94,49 @@ restCalls:
     securityScheme: mailchimpApiAuthorization
 
   scheduleCampaign:
-    path: 'campaigns/{id}/actions/schedule'
-    method: post
+    path: "campaigns/{id}/actions/schedule"
+    method: POST
     body: '{"schedule_time": "{schedule_time}"}'
     securityScheme: mailchimpApiAuthorization
 
   addCampaign:
-    path: 'campaigns'
-    method: post
+    path: "campaigns"
+    method: POST
     entityClass: com.fasterxml.jackson.databind.JsonNode
     body: '{ 
-        "type": "{type}"",
-        "recipients" : {
-          "list_id": "{list_id}"
-        },
-        "settings": {
-          "subject_line": "{subject_line}",
-          "preview_text": "{preview_text}",
-          "title": {title}",
-          "from_name": "{from_name}",
-          "to_name": "{to_name}"
+          "type": "{type}",
+          "recipients" : {
+            "list_id": "{list_id}"
+          },
+          "settings": {
+            "subject_line": "{subject_line}",
+            "title": "{title}",
+            "from_name": "{from_name}",
+            "to_name": "{to_name}"
+          }
         }'
     securityScheme: mailchimpApiAuthorization
 
-  batchSubscribeToList:
-    method: post
+  editCampaign:
+    path: "/campaigns/{id}"
+    method: PATCH
     entityClass: com.fasterxml.jackson.databind.JsonNode
+    body: '{ "type": "{type}",
+                  "recipients" : 
+                      {
+                        "list_id": "{list_id}"
+                      },
+                  "settings": 
+                      {
+                        "subject_line": "{subject_line}",
+                        "title": "{title}",
+                        "from_name": "{from_name}",
+                        "to_name": "{to_name}" 
+                      }
+                }'
     securityScheme: mailchimpApiAuthorization
-    path: "lists/{listId}"
-    body: '
-            {
-               "members": {members}
-            }
-          '
+
+  deleteCampaign:
+    path: "campaigns/{id}"
+    method: DELETE
+    securityScheme: mailchimpApiAuthorization
