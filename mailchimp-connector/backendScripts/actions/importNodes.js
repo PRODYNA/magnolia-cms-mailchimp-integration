@@ -20,20 +20,6 @@ var ImportCampaignItems = function(items, session, rootNode, contentType) {
         PropertyUtil.setProperty(settingsNode, "subject_line", entity.settings.subject_line);
         PropertyUtil.setProperty(settingsNode, "from_name", entity.settings.from_name);
         PropertyUtil.setProperty(settingsNode, "to_name", entity.settings.to_name);
-
-        console.log(entity.id);
-        console.log("schedule_time: " + entity.send_time);
-        let scheduleTime;
-
-        if (entity.send_time) {
-            let dt = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssX");
-            scheduleTime = dt.parse(entity.send_time);
-        }
-        else {
-            scheduleTime = null;
-        }
-        console.log(scheduleTime);
-        PropertyUtil.setProperty(campaignNode, "schedule_time", scheduleTime);
     });
 }
 
