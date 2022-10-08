@@ -105,7 +105,6 @@ subApps:
           root: true
           nodes: false
 
-      # TODO
       addCampaign:
         $type: openDetailSubappAction
         label: Add
@@ -115,7 +114,7 @@ subApps:
         availability:
           root: true
           nodes: false
-      # TODO
+
       editCampaign:
         $type: openDetailSubappAction
         label: Edit
@@ -125,7 +124,7 @@ subApps:
         availability:
           nodeTypes:
             mailchimp: mlchmp:campaign
-      # TODO
+
       deleteCampaign:
         $type: jsAction
         modelPath: /mailchimp-connector/backendScripts/actions/deleteNode.js
@@ -144,25 +143,6 @@ subApps:
           workspace: mailchimp
           restCall: deleteCampaign
           contentModel: mlchmp:campaign
-
-#      deleteCampaign:
-#        $type: jsAction
-#        modelPath: /mailchimp-connector/backendScripts/actions/deleteMailchimpCampaignAction.js
-#        label: Delete Campaign
-#        availability:
-#          nodeTypes:
-#            mailchimp: mlchmp:campaign
-#        exposedComponents:
-#          restClientFactory:
-#            componentClass: info.magnolia.rest.client.factory.RestClientFactory
-#            name: restClientFactory
-#          restClientRegistry:
-#            componentClass: info.magnolia.rest.client.registry.RestClientRegistry
-#            name: restClientRegistry
-#        parameters:
-#          workspace: mailchimp
-#          restCall: deleteCampaign
-#          contentModel: mlchmp:campaign
 
       publishCampaign:
         $type: jsAction
@@ -191,9 +171,9 @@ subApps:
         availability:
           nodeTypes:
             mailchimp: mlchmp:campaign
-          rules:
-            - name: jcrPublishedRule
-              $type: jcrPublishedRule
+#          rules:
+#            - name: jcrPublishedRule
+#              $type: jcrPublishedRule
 
 
 

@@ -3,10 +3,9 @@ loadScript("/mailchimp-connector/backendScripts/utils.js");
 var PublishMailchimpCampaignAction = function () {
 
     let utils = new Utils();
-    let nodeUtil = utils.getNodeUtil();
+    let NodeUtil = utils.getNodeUtil();
     let MgnlContext = Java.type("info.magnolia.context.MgnlContext");
     let PropertyUtil = Java.type("info.magnolia.jcr.util.PropertyUtil");
-    let propertyUtil = Java.type("info.magnolia.jcr.util.PropertyUtil");
     let Notification = Java.type("com.vaadin.ui.Notification");
     let SUCCESS_SYNCHRONIZATION_MESSAGE = 'Campaign was successfully send to mailchimp';
     let FAILURE_SYNCHRONIZATION_MESSAGE = 'There was a failure sending the campaign to mailchimp: ';
@@ -16,12 +15,12 @@ var PublishMailchimpCampaignAction = function () {
 
         let restClient;
         try{
-            let type = propertyUtil.getString(this.content, "type");
-            let title = propertyUtil.getString(this.content, "settings/title");
-            let to_name = propertyUtil.getString(this.content, "settings/to_name");
-            let from_name = propertyUtil.getString(this.content, "settings/from_name");
-            let subject_line = propertyUtil.getString(this.content, "settings/subject_line");
-            let list_id = propertyUtil.getString(this.content, "recipients/list_id");
+            let type = PropertyUtil.getString(this.content, "type");
+            let title = PropertyUtil.getString(this.content, "settings/title");
+            let to_name = PropertyUtil.getString(this.content, "settings/to_name");
+            let from_name = PropertyUtil.getString(this.content, "settings/from_name");
+            let subject_line = PropertyUtil.getString(this.content, "settings/subject_line");
+            let list_id = PropertyUtil.getString(this.content, "recipients/list_id");
 
             let campaignId = PropertyUtil.getString(this.content, "id");
 
@@ -38,18 +37,21 @@ var PublishMailchimpCampaignAction = function () {
                     "subject_line": subject_line
                 });
                 let statusInfo = res.getStatusInfo();
-                console.log(statusInfo);
-                console.log(statusInfo.getStatusCode());
+                let body = JSON.parse(res.getEntity());
                 if (statusInfo.getStatusCode() === 200) {
-                    let body = JSON.parse(res.getEntity());
-                    let identifier = propertyUtil.getString(this.content, "jcr:uuid");
-                    let campaignNode = nodeUtil.getNodeByIdentifier(this.parameters.get("workspace"), identifier);
+                    let identifier = PropertyUtil.getString(this.content, "jcr:uuid");
+                    let campaignNode = NodeUtil.getNodeByIdentifier(this.parameters.get("workspace"), identifier);
                     PropertyUtil.setProperty(campaignNode, "status", body.status);
                     session.save();
                     Notification.show(SUCCESS_SYNCHRONIZATION_MESSAGE, Notification.Type.HUMANIZED_MESSAGE).setDelayMsec(5000);
                 } else {
-                    Notification.show(FAILURE_SYNCHRONIZATION_MESSAGE + statusInfo.getReasonPhrase(), Notification.Type.ERROR_MESSAGE).setDelayMsec(5000);
-
+                    try {
+                        if (body.detail) {
+                            Notification.show(FAILURE_SYNCHRONIZATION_MESSAGE + body.detail, Notification.Type.ERROR_MESSAGE).setDelayMsec(5000);
+                        }
+                    } catch (err) {
+                        Notification.show(FAILURE_SYNCHRONIZATION_MESSAGE + statusInfo.getReasonPhrase(), Notification.Type.ERROR_MESSAGE).setDelayMsec(5000);
+                    }
                 }
             } else {
 
@@ -63,20 +65,24 @@ var PublishMailchimpCampaignAction = function () {
                 });
                 let statusInfo = res.getStatusInfo();
                 console.log(statusInfo);
+                let body = JSON.parse(res.getEntity());
                 console.log(statusInfo.getStatusCode());
                 if (statusInfo.getStatusCode() === 200) {
-                    let body = JSON.parse(res.getEntity());
-                    let identifier = propertyUtil.getString(this.content, "jcr:uuid");
-                    let campaignNode = nodeUtil.getNodeByIdentifier(this.parameters.get("workspace"), identifier);
+                    let identifier = PropertyUtil.getString(this.content, "jcr:uuid");
+                    let campaignNode = NodeUtil.getNodeByIdentifier(this.parameters.get("workspace"), identifier);
                     PropertyUtil.setProperty(campaignNode, "id", body.id);
-                    nodeUtil.renameNode(campaignNode, body.id);
-                    console.log(body.id);
+                    NodeUtil.renameNode(campaignNode, body.id);
                     PropertyUtil.setProperty(campaignNode, "status", body.status);
                     session.save();
                     Notification.show(SUCCESS_SYNCHRONIZATION_MESSAGE, Notification.Type.HUMANIZED_MESSAGE).setDelayMsec(5000);
                 } else {
-                    console.log(SUCCESS_SYNCHRONIZATION_MESSAGE + statusInfo.getReasonPhrase())
-                    Notification.show(FAILURE_SYNCHRONIZATION_MESSAGE, Notification.Type.ERROR_MESSAGE).setDelayMsec(5000);
+                    try {
+                        if (body.detail) {
+                            Notification.show(FAILURE_SYNCHRONIZATION_MESSAGE + body.detail, Notification.Type.ERROR_MESSAGE).setDelayMsec(5000);
+                        }
+                    } catch (err) {
+                        Notification.show(FAILURE_SYNCHRONIZATION_MESSAGE + statusInfo.getReasonPhrase(), Notification.Type.ERROR_MESSAGE).setDelayMsec(5000);
+                    }
                 }
 
             }
