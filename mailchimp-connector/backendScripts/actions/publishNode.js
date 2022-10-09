@@ -72,7 +72,7 @@ var publishNode = function () {
                 if (restCallPrefix === "add") {
                     PropertyUtil.setProperty(node, "id", responseBody.id);
                     if (responseBody.status) {
-                        PropertyUtil.setProperty(campaignNode, "status", responseBody.status);
+                        PropertyUtil.setProperty(node, "status", responseBody.status);
                     }
                     NodeUtil.renameNode(node, responseBody.id);
                 }
