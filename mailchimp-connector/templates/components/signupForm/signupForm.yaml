@@ -1,4 +1,4 @@
-title: Mailchimp Signup Form
+title: signupForm.component.name
 renderType: freemarker
 dialog: mailchimp-connector:components/signupForm/signupForm
 templateScript: /mailchimp-connector/templates/components/signupForm/signupForm.ftl

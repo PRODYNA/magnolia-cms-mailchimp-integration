@@ -68,6 +68,7 @@ var ImportNodes = function () {
         let restClient;
         let session = MgnlContext.getJCRSession(this.parameters.get("workspace"));
         let rootNode = session.getRootNode();
+        let Notification = Java.type("com.vaadin.ui.Notification");
 
         try {
             restClient = utils.getRestClient("mailchimpRestClient");
@@ -86,6 +87,7 @@ var ImportNodes = function () {
                 } else {
                     throw "Unrecognized content type " + contentType;
                 }
+                Notification.show("Nodes imported successfully.", Notification.Type.HUMANIZED_MESSAGE).setDelayMsec(5000);
             }
             if(this.content && this.content.isNode() && session.nodeExists(this.content.getPath())) {
                 session.getItem(this.content.getPath()).remove();
@@ -93,6 +95,7 @@ var ImportNodes = function () {
             session.save();
         } catch (err) {
             console.log("Could not retrieve data ", err);
+            throw err;
         } finally {
             restClient.close();
         }

@@ -4,6 +4,7 @@ var publishNode = function () {
     let utils = new Utils();
     let NodeUtil = utils.getNodeUtil();
     let NodeTypeUtil = utils.getNodeTypes();
+    let restClient = utils.getRestClient("mailchimpRestClient");
     let MgnlContext = Java.type("info.magnolia.context.MgnlContext");
     let PropertyUtil = Java.type("info.magnolia.jcr.util.PropertyUtil");
     let Notification = Java.type("com.vaadin.ui.Notification");
@@ -39,6 +40,26 @@ var publishNode = function () {
         };
     }
 
+    function scheduleCampaign(id, scheduleAt) {
+        let schedule_time_parse = new Date(scheduleAt);
+        let schedule_utc_time = Date.UTC(schedule_time_parse.getUTCFullYear(), schedule_time_parse.getUTCMonth(),
+            schedule_time_parse.getUTCDate(), schedule_time_parse.getUTCHours(),
+            schedule_time_parse.getUTCMinutes(), schedule_time_parse.getUTCSeconds());
+
+        let schedule_time = new Date(schedule_utc_time).toISOString();
+        let scheduleResponse = restClient.invoke("scheduleCampaign",  {
+            "id": id,
+            "schedule_time": schedule_time
+        });
+        if (scheduleResponse.getStatusInfo().getStatusCode() !== 204) {
+            let responseMailchimpError = JSON.parse(scheduleResponse.getEntity()).detail;
+            if (responseMailchimpError) {
+                throw responseMailchimpError;
+            }
+            throw scheduleResponse.getStatusInfo().getReasonPhrase();
+        }
+    }
+
     function saveToJCR(node, session) {
         NodeTypeUtil.Activatable.update(node, "Magnolia Mailchimp App", true);
         session.save();
@@ -50,16 +71,17 @@ var publishNode = function () {
         let session = MgnlContext.getJCRSession(this.parameters.get("workspace"));
         let requestObject;
         let scheduleAt;
+        let scheduled;
         if (NodeUtil.isNodeType(node, "mlchmp:campaign")) {
             requestObject = new CampaignRequest(this.content);
             scheduleAt = PropertyUtil.getString(this.content, "schedule_time");
+            scheduled = PropertyUtil.getBoolean(this.content, "scheduled", false);
         } else if (NodeUtil.isNodeType(node, "mlchmp:list")) {
             requestObject = new ListRequest(this.content);
         } else {
             throw "Unknown node type to publish";
         }
 
-        let restClient = utils.getRestClient("mailchimpRestClient");
         let restCallPrefix = requestObject.id ? "edit" : "add";
         if (restCallPrefix === "add") {
             delete requestObject.id;
@@ -68,11 +90,8 @@ var publishNode = function () {
 
         try {
             let response = restClient.invoke(restCall, requestObject);
-            console.log(JSON.stringify(response.getEntity));
-
             let responseStatus = response.getStatusInfo();
             let responseBody = JSON.parse(response.getEntity());
-            console.log(JSON.stringify(responseBody));
 
             if (responseStatus.getStatusCode() === 200) {
                 if (restCallPrefix === "add") {
@@ -83,34 +102,18 @@ var publishNode = function () {
                     NodeUtil.renameNode(node, responseBody.id);
                 }
                 if (NodeUtil.isNodeType(node, "mlchmp:campaign")) {
-                    if (scheduleAt) {
-                        let schedule_time_parse = new Date(scheduleAt);
-                        let schedule_utc_time = Date.UTC(schedule_time_parse.getUTCFullYear(), schedule_time_parse.getUTCMonth(),
-                            schedule_time_parse.getUTCDate(), schedule_time_parse.getUTCHours(),
-                            schedule_time_parse.getUTCMinutes(), schedule_time_parse.getUTCSeconds());
-
-                        let schedule_time = new Date(schedule_utc_time).toISOString();
-                        let response = restfn.callForResponse("mailchimpRestClient", "scheduleCampaign", {
-                            "id": responseBody.id,
-                            "schedule_time": schedule_time
-                        });
-                        let statusInfo = response.getStatusInfo();
-                        if (statusInfo.getStatusCode() === 204) {
+                    if (scheduleAt && !scheduled) {
+                        try {
+                            scheduleCampaign(responseBody.id, scheduleAt);
+                            PropertyUtil.setProperty(node, "scheduled", true);
                             saveToJCR(node, session);
-                            Notification.show("Campaign published successfully to Mailchimp and scheduled at " + scheduleAt, Notification.Type.HUMANIZED_MESSAGE).setDelayMsec(5000);
-                        } else {
-                            try {
-                                let responseMailchimpError = JSON.parse(response.getEntity()).detail;
-                                if (responseMailchimpError) {
-                                    Notification.show("Failed to publish and schedule campaign with error " + responseMailchimpError, Notification.Type.ERROR_MESSAGE).setDelayMsec(5000);
-                                }
-                            } catch (err) {
-                                Notification.show("Failed to publish and schedule campaign with unknown error, API response is " + statusInfo.getReasonPhrase(), Notification.Type.ERROR_MESSAGE).setDelayMsec(5000);
-                            }
+                            Notification.show("Node published successfully to Mailchimp", Notification.Type.HUMANIZED_MESSAGE).setDelayMsec(5000);
+                        } catch (err) {
+                            Notification.show("Failed to publish node with error " + err, Notification.Type.ERROR_MESSAGE).setDelayMsec(5000);
                         }
                     } else {
                         saveToJCR(node, session);
-                        Notification.show("Campaign published successfully to Mailchimp", Notification.Type.HUMANIZED_MESSAGE).setDelayMsec(5000);
+                        Notification.show("Node published successfully to Mailchimp", Notification.Type.HUMANIZED_MESSAGE).setDelayMsec(5000);
                     }
                 } else {
                     saveToJCR(node, session);

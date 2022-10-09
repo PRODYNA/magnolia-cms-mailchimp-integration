@@ -16,6 +16,8 @@ model:
     - name: status
     - name: schedule_time
       type: Date
+    - name: scheduled
+      type: Boolean
   subModels:
     - name: recipients
       properties:

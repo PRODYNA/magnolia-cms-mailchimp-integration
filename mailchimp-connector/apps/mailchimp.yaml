@@ -27,8 +27,6 @@ subApps:
           columns: !override &columns
             id:
               label: subapp.campaigns.column.id.label
-            type:
-              label: subapp.campaigns.column.type.label
             title:
               label: subapp.campaigns.column.title.label
               $type: jsColumn
@@ -36,6 +34,8 @@ subApps:
               parameters:
                 path: settings
                 property: title
+            type:
+              label: subapp.campaigns.column.type.label
             from:
               label: subapp.campaigns.column.from.label
               $type: jsColumn
@@ -57,6 +57,8 @@ subApps:
               parameters:
                 path: recipients
                 property: list_id
+            schedule_time:
+              label: subapp.campaigns.column.scheduled.label
             status:
               label: subapp.campaigns.column.status.label
             syncStatus:
@@ -365,6 +367,10 @@ subApps:
           root: false
           nodeTypes:
             csvList: mlchmp:audience-csv
+        parameters:
+          nodeType: mlchmp:audience-csv
+          callName: batchSubscribeToList
+          restClient: mailchimpRestClient
 
   importAudienceDetail:
     label: subapp.import.audience.detail.label
@@ -469,6 +475,7 @@ subApps:
       workspace: mailchimp
       allowedNodeTypes:
         - mlchmp:list
+
     actions:
       cancel:
         label: subapp.import.lists.action.cancel.label
@@ -489,6 +496,7 @@ subApps:
           restCall: getLists
           bodyProperty: lists
           contentModel: mlchmp:list
+
     form:
       properties:
         id:
@@ -637,7 +645,8 @@ subApps:
               required: true
 
   campaignDetail:
-    label: Add/Edit Campaign
+    label: subapp.campaign.detail.name
+    icon: icon-configuration-app
     class: info.magnolia.ui.contentapp.detail.DetailDescriptor
     datasource:
       $type: jcrDatasource
@@ -651,7 +660,7 @@ subApps:
     form:
       properties:
         type:
-          label: Type
+          label: subapp.campaign.detail.type.label
           $type: comboBoxField
           required: true
           datasource:
@@ -659,19 +668,19 @@ subApps:
             options:
               plaintext:
                 value: plaintext
-                label: PLAINTEXT
+                label: subapp.campaign.detail.type.option.plaintext
               regular:
                 value: regular
-                label: REGULAR
+                label: subapp.campaign.detail.type.option.regular
 
         recipients:
-          label: Recipients
+          label: subapp.campaign.detail.recipients.label
           $type: compositeField
           itemProvider:
             $type: jcrChildNodeProvider
           properties:
             list_id:
-              label: List
+              label: subapp.campaign.detail.recipients.list
               $type: restComboBoxField
               required: true
               datasource:
@@ -685,39 +694,43 @@ subApps:
                   describeBy: '$.name'
 
         settings:
-          label: Recipients
+          label: subapp.campaign.detail.settings.label
           $type: compositeField
           itemProvider:
             $type: jcrChildNodeProvider
           properties:
-            to_name:
-              label: To
+            title:
               $type: textField
+              label: subapp.campaign.detail.settings.title.label
               required: true
-            from_name:
-              label: from
+            to_name:
               $type: textField
+              label: subapp.campaign.detail.settings.to.label
+              description: subapp.campaign.detail.settings.to.description
+              required: true
+              defaultValue: ""
+            from_name:
+              $type: textField
+              label: subapp.campaign.detail.settings.from.label
+              description: subapp.campaign.detail.settings.from.description
               required: true
             subject_line:
-              label: Subject
               $type: textField
-              required: true
-            title:
-              label: Title
-              $type: textField
+              label: subapp.campaign.detail.settings.subject.label
+              description: subapp.campaign.detail.settings.subject.description
               required: true
 
         schedule_time:
-          label: "Schedule Date"
           $type: dateField
+          label: subapp.campaign.detail.scheduleTime
           dateFormat: "yyyy-MM-dd"
           time: true
           timeFormat: "HH:mm:ss"
     
     actions:
       cancel:
-        label: Cancel
         $type: closeAction
+        label: subapp.campaign.detail.action.cancel
       commit:
         $type: commitAction
-        label: Save Changes
+        label: subapp.campaign.detail.action.confirm
