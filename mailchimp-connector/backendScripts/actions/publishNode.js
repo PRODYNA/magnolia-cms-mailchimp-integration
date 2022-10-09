@@ -39,14 +39,20 @@ var publishNode = function () {
         };
     }
 
+    function saveToJCR(node, session) {
+        NodeTypeUtil.Activatable.update(node, "Magnolia Mailchimp App", true);
+        session.save();
+    }
+
     this.execute = function () {
         let nodeIdentifier = PropertyUtil.getString(this.content, "jcr:uuid");
         let node = NodeUtil.getNodeByIdentifier(this.parameters.get("workspace"), nodeIdentifier);
         let session = MgnlContext.getJCRSession(this.parameters.get("workspace"));
         let requestObject;
-
+        let scheduleAt;
         if (NodeUtil.isNodeType(node, "mlchmp:campaign")) {
             requestObject = new CampaignRequest(this.content);
+            scheduleAt = PropertyUtil.getString(this.content, "schedule_time");
         } else if (NodeUtil.isNodeType(node, "mlchmp:list")) {
             requestObject = new ListRequest(this.content);
         } else {
@@ -76,9 +82,40 @@ var publishNode = function () {
                     }
                     NodeUtil.renameNode(node, responseBody.id);
                 }
-                NodeTypeUtil.Activatable.update(node, "Magnolia Mailchimp App", true);
-                session.save();
-                Notification.show("Node published successfully to Mailchimp", Notification.Type.HUMANIZED_MESSAGE).setDelayMsec(5000);
+                if (NodeUtil.isNodeType(node, "mlchmp:campaign")) {
+                    if (scheduleAt) {
+                        let schedule_time_parse = new Date(scheduleAt);
+                        let schedule_utc_time = Date.UTC(schedule_time_parse.getUTCFullYear(), schedule_time_parse.getUTCMonth(),
+                            schedule_time_parse.getUTCDate(), schedule_time_parse.getUTCHours(),
+                            schedule_time_parse.getUTCMinutes(), schedule_time_parse.getUTCSeconds());
+
+                        let schedule_time = new Date(schedule_utc_time).toISOString();
+                        let response = restfn.callForResponse("mailchimpRestClient", "scheduleCampaign", {
+                            "id": responseBody.id,
+                            "schedule_time": schedule_time
+                        });
+                        let statusInfo = response.getStatusInfo();
+                        if (statusInfo.getStatusCode() === 204) {
+                            saveToJCR(node, session);
+                            Notification.show("Campaign published successfully to Mailchimp and scheduled at " + scheduleAt, Notification.Type.HUMANIZED_MESSAGE).setDelayMsec(5000);
+                        } else {
+                            try {
+                                let responseMailchimpError = JSON.parse(response.getEntity()).detail;
+                                if (responseMailchimpError) {
+                                    Notification.show("Failed to publish and schedule campaign with error " + responseMailchimpError, Notification.Type.ERROR_MESSAGE).setDelayMsec(5000);
+                                }
+                            } catch (err) {
+                                Notification.show("Failed to publish and schedule campaign with unknown error, API response is " + statusInfo.getReasonPhrase(), Notification.Type.ERROR_MESSAGE).setDelayMsec(5000);
+                            }
+                        }
+                    } else {
+                        saveToJCR(node, session);
+                        Notification.show("Campaign published successfully to Mailchimp", Notification.Type.HUMANIZED_MESSAGE).setDelayMsec(5000);
+                    }
+                } else {
+                    saveToJCR(node, session);
+                    Notification.show("Node published successfully to Mailchimp", Notification.Type.HUMANIZED_MESSAGE).setDelayMsec(5000);
+                }
             } else {
                 try {
                     Notification.show("Failed to publish node with error " + responseBody.detail, Notification.Type.ERROR_MESSAGE).setDelayMsec(5000);

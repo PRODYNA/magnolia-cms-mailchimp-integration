@@ -84,10 +84,6 @@ subApps:
               name: publicationActions
               items:
                 - name: publishCampaign
-            campaignActions:
-              name: campaignActions
-              items:
-                - name: scheduleCampaign
 
     actions:
       importCampaigns:
@@ -163,17 +159,6 @@ subApps:
         parameters:
           workspace: mailchimp
           restCallSuffix: Campaign
-
-      scheduleCampaign:
-        $type: openDetailSubappAction
-        icon: icon-mail-setting
-        label: subapp.campaigns.action.schedule.label
-        appName: mailchimp
-        subAppName: scheduleCampaignDetail
-        viewType: edit
-        availability:
-          nodeTypes:
-            mailchimp: mlchmp:campaign
 
   lists:
     label: subapp.lists.name
@@ -705,8 +690,6 @@ subApps:
           itemProvider:
             $type: jcrChildNodeProvider
           properties:
-
-
             to_name:
               label: To
               $type: textField
@@ -723,6 +706,14 @@ subApps:
               label: Title
               $type: textField
               required: true
+
+        schedule_time:
+          label: "Schedule Date"
+          $type: dateField
+          dateFormat: "yyyy-MM-dd"
+          time: true
+          timeFormat: "HH:mm:ss"
+    
     actions:
       cancel:
         label: Cancel
@@ -730,42 +721,3 @@ subApps:
       commit:
         $type: commitAction
         label: Save Changes
-
-  scheduleCampaignDetail:
-    label: Schedule Campaign
-    class: info.magnolia.ui.contentapp.detail.DetailDescriptor
-    datasource:
-      $type: jcrDatasource
-      workspace: mailchimp
-      allowedNodeTypes:
-        - mlchmp:campaign
-    itemProvider:
-      $type: jcrNodeFromLocationProvider
-    form:
-      properties:
-        id:
-          label: "Campaign"
-          $type: restComboBoxField
-          datasource:
-            name: rest
-            $type: jsonDatasource
-            restClient: mailchimpRestClient
-            restCall: getCampaigns
-            jsonPathExpressions:
-              itemId: '$.id'
-              items: '$.campaigns'
-              describeBy: '$.settings.title'
-        schedule_time:
-          label: "Schedule Date"
-          $type: dateField
-          dateFormat: "yyyy-MM-dd"
-          time: true
-          timeFormat: "HH:mm:ss"
-    actions:
-      cancel:
-        label: Cancel
-        class: info.magnolia.ui.contentapp.action.CloseActionDefinition
-      commit:
-        $type: jsAction
-        modelPath: /mailchimp-connector/backendScripts/actions/scheduleMailchimpCampaignAction.js
-        label: Schedule
