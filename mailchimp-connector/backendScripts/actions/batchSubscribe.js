@@ -65,7 +65,7 @@ var ExecuteBatchSubscribe = function () {
             propertyUtil.setProperty(node, "status", responseStatus);
             session.save();
 
-            if(responseStatus === "failure") {
+            if(responseStatus == "failure") {
                 Notification.show("Could not import contacts to Mailchimp.", Notification.Type.ERROR_MESSAGE);
             } else {
                 Notification.show("Successfully added contacts to Mailchimp.", Notification.Type.HUMANIZED_MESSAGE);

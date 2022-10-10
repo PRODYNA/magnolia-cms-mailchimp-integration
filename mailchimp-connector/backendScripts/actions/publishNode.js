@@ -94,7 +94,7 @@ var publishNode = function () {
             let responseBody = JSON.parse(response.getEntity());
 
             if (responseStatus.getStatusCode() === 200) {
-                if (restCallPrefix === "add") {
+                if (restCallPrefix == "add") {
                     PropertyUtil.setProperty(node, "id", responseBody.id);
                     if (responseBody.status) {
                         PropertyUtil.setProperty(node, "status", responseBody.status);
