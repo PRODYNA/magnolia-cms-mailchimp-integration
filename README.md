@@ -8,6 +8,7 @@ The module requires Magnolia DX Core. Tested with Magnolia CMS 6.2.17.
 For this light integration the following techniques have been used:
 - [Rest Client Module](https://docs.magnolia-cms.com/product-docs/6.2/Modules/List-of-modules/REST-Client-module.html)
 - [Backend Live](https://docs.magnolia-cms.com/backend-live/index.html)
+- [Frontend Component](https://docs.magnolia-cms.com/product-docs/6.2/Developing/Templating.html)
 ---
 
 ## Functionality Overview
@@ -20,7 +21,7 @@ A content app that allows the user to manage campaigns and lists:
 - Synchronize lists information
 - Batch import of new email accounts to a list
 
-The system that owns the data is Mailchimp. This means that Mailchimp contains all the information and when it comes to the integration with this Magnolia solution.
+All data is originated from Mailchimp, so that makes Mailchimp the single source of truth. For this reason the synchronization functionality is used for Campaigns and Lists and the [[#Sync to Mailchimp Status]] is used at the respective content apps.
 
 ## Features
 
