@@ -6,3 +6,7 @@ dependencies:
     version: 6.2.9/*
   rest-client:
     version: 2.0/*
+  javascript-models:
+    version: 2.0/*
+  backend-live-actions:
+    version: 1.0/*

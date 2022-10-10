@@ -1,0 +1,31 @@
+datasource:
+  workspace: mailchimp
+  rootPath: /
+  namespaces:
+    mlchmp: https://www.prodyna.com/jcr/1.0/mlchmp
+  autoCreate: true
+
+model:
+  nodeType: mlchmp:campaign
+  properties:
+    - name: id
+    - name: type
+    - name: recipients
+    - name: settings
+    - name: content
+    - name: status
+    - name: schedule_time
+      type: Date
+    - name: scheduled
+      type: Boolean
+    - name: content
+  subModels:
+    - name: recipients
+      properties:
+        - name: list_id
+    - name: settings
+      properties:
+        - name: from_name
+        - name: subject_line
+        - name: to_name
+        - name: title

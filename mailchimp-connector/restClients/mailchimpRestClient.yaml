@@ -1,0 +1,141 @@
+baseUrl: !env https://${MAILCHIMP_SERVER_PREFIX}.api.mailchimp.com/3.0/
+name: "mailchimpRestClient"
+securitySchemes:
+  mailchimpApiAuthorization:
+    $type: basic
+    username: !env ${MAILCHIMP_USERNAME}
+    password: !env ${MAILCHIMP_API_KEY}
+
+restCalls:
+  addList:
+    path: "lists"
+    method: POST
+    entityClass: com.fasterxml.jackson.databind.JsonNode
+    body: '
+            {
+               "name": "{name}",
+               "contact" : {
+                  "company" : "{company}",
+                  "address1" : "{address1}",
+                  "city" : "{city}",
+                  "country" : "{country}",
+                  "zip" : "{zip}",
+                  "state" : "{state}"
+               },
+               "permission_reminder" : "{permission_reminder}",
+               "campaign_defaults" : {
+                  "from_name" : "{from_name}",
+                  "from_email" : "{from_email}",
+                  "subject" : "{subject}",
+                  "language" : "{language}"
+               },
+               "email_type_option" : {email_type_option}
+            }
+          '
+    securityScheme: mailchimpApiAuthorization
+
+  getLists:
+    path: "lists"
+    method: GET
+    entityClass: com.fasterxml.jackson.databind.JsonNode
+    securityScheme: mailchimpApiAuthorization
+
+  getListById:
+    path: "lists/{id}"
+    method: GET
+    entityClass: com.fasterxml.jackson.databind.JsonNode
+    securityScheme: mailchimpApiAuthorization
+
+  getListSignupFormsById:
+    path: "lists/{id}/signup-forms"
+    method: GET
+    entityClass: com.fasterxml.jackson.databind.JsonNode
+    securityScheme: mailchimpApiAuthorization
+
+  getListMembers:
+    path: "lists/{id}/members"
+    method: GET
+    entityClass: com.fasterxml.jackson.databind.JsonNode
+    securityScheme: mailchimpApiAuthorization
+
+  deleteList:
+    path: "lists/{id}"
+    method: DELETE
+    securityScheme: mailchimpApiAuthorization
+
+  batchSubscribeToList:
+    method: POST
+    entityClass: com.fasterxml.jackson.databind.JsonNode
+    securityScheme: mailchimpApiAuthorization
+    path: "lists/{listId}"
+    body: '
+            {
+               "members": {members}
+            }
+          '
+
+  getCampaigns:
+    path: "campaigns"
+    method: GET
+    entityClass: com.fasterxml.jackson.databind.JsonNode
+    securityScheme: mailchimpApiAuthorization
+
+  getCampaign:
+    path: "campaigns/{id}"
+    method: GET
+    entityClass: com.fasterxml.jackson.databind.JsonNode
+    securityScheme: mailchimpApiAuthorization
+
+  getContent:
+    path: "campaigns/{id}/content"
+    method: GET
+    entityClass: com.fasterxml.jackson.databind.JsonNode
+    securityScheme: mailchimpApiAuthorization
+
+  scheduleCampaign:
+    path: "campaigns/{id}/actions/schedule"
+    method: POST
+    body: '{"schedule_time": "{schedule_time}"}'
+    securityScheme: mailchimpApiAuthorization
+
+  addCampaign:
+    path: "campaigns"
+    method: POST
+    entityClass: com.fasterxml.jackson.databind.JsonNode
+    body: '{ 
+          "type": "{type}",
+          "recipients" : {
+            "list_id": "{list_id}"
+          },
+          "settings": {
+            "subject_line": "{subject_line}",
+            "title": "{title}",
+            "from_name": "{from_name}",
+            "to_name": "{to_name}"
+          }
+        }'
+    securityScheme: mailchimpApiAuthorization
+
+  editCampaign:
+    path: "/campaigns/{id}"
+    method: PATCH
+    entityClass: com.fasterxml.jackson.databind.JsonNode
+    body: '{ "type": "{type}",
+                  "recipients" : 
+                      {
+                        "list_id": "{list_id}"
+                      },
+                  "settings": 
+                      {
+                        "subject_line": "{subject_line}",
+                        "title": "{title}",
+                        "from_name": "{from_name}",
+                        "to_name": "{to_name}" 
+                      }
+                }'
+    securityScheme: mailchimpApiAuthorization
+
+  deleteCampaign:
+    path: "campaigns/{id}"
+    method: DELETE
+    securityScheme: mailchimpApiAuthorization
