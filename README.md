@@ -21,7 +21,7 @@ A content app that allows the user to manage campaigns and lists:
 - Synchronize lists information
 - Batch import of new email accounts to a list
 
-All data is originated from Mailchimp, so that makes Mailchimp the single source of truth. For this reason the synchronization functionality is used for Campaigns and Lists and the [[#Sync to Mailchimp Status]] is used at the respective content apps.
+All data is originated from Mailchimp, so that makes Mailchimp the single source of truth. For this reason the synchronization functionality is used for Campaigns and Lists and the [Mailchimp Status](#Sync to Mailchimp Status) is used at the respective content apps.
 
 ## Features
 
@@ -79,8 +79,10 @@ A content app that contains two tabs, exist in the application. The tabs are Cam
 
 ## Campaigns Tab
 The Campaigns tab, shows a list of Campaigns:
-![[campaign-browser.png]]
+
+!["Campaign Browser](/_dev/campaign-browser.png "Campaign Browser")
 The following Actions are available:
+
 1. Import Campaigns From Mailchimp
 2. Add
 3. Edit
@@ -96,30 +98,31 @@ For every Campaign, the following information is displayed:
 - List ID
 - Schedule Date
 - Campaign Status
-- Sync Status (refer to [[#Sync to Mailchimp Status]])
+- Sync Status (refer to [Sync Mailchimp Status](#Sync to Mailchimp Status))
 
 ### Action: Import Campaign
 When the action Import Campaign From Mailchimp is selected, then a SubApp will open. The SubApp contains a list of Campaigns saved to Mailchimp.
-![[import-campaign.png]]
+![Import Campaign](/_dev/import-campaign.png "Import Campaign")
 The confirm button will import this data from Mailchimp to JCR and the respective notification will be displayed.
-![[import-campaign-notification.png]]
+![Import Campaign Notification](/_dev/import-campaign-notification.png "Import Campaign Notification")
 
 ### Action: Add/Edit Campaign
 When selecting the Add/Edit Action, the user is prompted to fill the form with the following information.
-![[add-campaign.png]]
+![Add Campaign](/_dev/add-campaign.png "Add Campaign")
 When the Confirm button is clicked, the form information is saved on JCR.
 
 ### Action: Delete Campaign
 When a Campaign is selected, the Delete action will remove it from the JCR. The respective notification will be displayed.
-![[delete-campaign.png]]
+![Delete Campaign](/_dev/delete-campaign.png "Delete Campaign")
 
 ### Action: Sync to Mailchimp
 This action Schedules the selected campaign.
 
 ## Lists Tab
 The Lists tab, shows a list of Lists(Audiences).
-![[list-browser.png]]
+![List Browser](/_dev/list-browser.png "List Browser")
 The following Actions are available:
+
 1. Import Lists From Mailchimp
 2. Add
 3. Edit
@@ -131,23 +134,23 @@ For every List(Audience), the following information is displayed:
 - List ID
 - Name
 - Members
-- Sync Status (refer to [[#Sync to Mailchimp Status]])
+- Sync Status (refer to [Sync Mailchimp Status](#Sync to Mailchimp Status))
 
 ### Action: Import Lists
 When the action Import Campaign From Mailchimp is selected, then a SubApp will open. The SubApp contains a list of Lists(Audiences) saved to Mailchimp.
-![[import-lists.png]]
+![Import Lists](/_dev/import-lists.png "Import Lists")
 The confirm button will import this data from Mailchimp to JCR and the respective notification will be displayed.
-![[import-lists-notification.png]]
+![Import Lists Notification](/_dev/import-lists-notification.png "Import Lists Notification")
 
 ### Action: Add/Edit List
 When selecting the Add/Edit Action, the user is prompted to fill the form with the following information.
-![[add-list.png]]
-![[add-list2.png]]
+![Add List](/_dev/add-list.png "Add List")
+![Add List](/_dev/add-list2.png "Add List")
 When the Save Changes button is clicked, the form information is saved on JCR.
 
 ### Action: Delete List
 When a List is selected, the Delete action will remove it from the JCR. The respective notification will be displayed.
-![[delete-list.png]]
+![Delete List](/_dev/delete-list.png "Delete List")
 
 ### Action: Sync Status
 This action synchronizes the local JCR data with Mailchimp.
@@ -157,8 +160,9 @@ When the action is clicked, a new tab Import Audience is displayed.
 
 ### Import Audience
 The tab Import Audience allows the user to create a connection between (existing or new) CSV files of a specific format and a List of Mailchimp. Every item of the Import Audience shows this connection between CSV and List. After the connection has been created, the item can be selected in order the emails of the CSV to be imported to the specified Mailchimp List.
-![[import-audience.png]]
+![Import Audience](/_dev/import-audience.png "Import Audience")
 The following Actions are available:
+
 1. Create Import Audience Job (CSV) - visible when no items of the browser is clicked
 2. Execute Batch Subscribe -  visible when one of the items of the browser is clicked
 
@@ -170,9 +174,12 @@ For every item of the Import Audience browser, the following information is disp
 
 #### Action: Create Import Audience Job (CSV)
 When the action is clicked a new SubApp is displayed. The user can add the information of the form as shown below
-![[create-batch-import.png]]
+![Create Batch Import](/_dev/create-batch-import.png "Create Batch Import")
 
-The Import Name must be unique. Additionally, the CSV file must have the correct format, as shown in the sample below *(the header must be email_address and below must be the list of emails)*. ![[sample_csv.csv]]
+The Import Name must be unique. Additionally, the CSV file must have the correct format, as shown in the sample below *(the header must be email_address and below must be the list of emails)*. 
+
+[Sample CSV](./dev/sample_csv.csv)
+
 #### Action: Execute Batch Subscribe
 When an item of the browser is selected and the action is clicked, the content of the csv file is sent to Mailchimp in order to subscribe emails to the list.
 
