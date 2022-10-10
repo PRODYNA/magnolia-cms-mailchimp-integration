@@ -18,6 +18,7 @@ model:
       type: Date
     - name: scheduled
       type: Boolean
+    - name: content
   subModels:
     - name: recipients
       properties:

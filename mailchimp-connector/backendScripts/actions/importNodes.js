@@ -5,26 +5,41 @@ var ImportCampaignItems = function(items, session, rootNode, contentType) {
     let nodeUtil = utils.getNodeUtil();
     let nodeTypesUtil = utils.getNodeTypes();
     let PropertyUtil = Java.type("info.magnolia.jcr.util.PropertyUtil");
-    items.forEach(entity => {
-        if(session.nodeExists("/" + entity.id)) {
-            session.getItem("/" + entity.id).remove();
-        }
-        let campaignNode = nodeUtil.createPath(rootNode, entity.id, contentType);
-        PropertyUtil.setProperty(campaignNode, "id", entity.id);
-        PropertyUtil.setProperty(campaignNode, "type", entity.type);
-        PropertyUtil.setProperty(campaignNode, "status", entity.status);
+    let restClient;
+    try {
+        restClient = utils.getRestClient("mailchimpRestClient");
+        items.forEach(entity => {
+            if (session.nodeExists("/" + entity.id)) {
+                session.getItem("/" + entity.id).remove();
+            }
 
-        let recipientsNode = nodeUtil.createPath(campaignNode, "recipients", "mgnl:contentNode");
-        PropertyUtil.setProperty(recipientsNode, "list_id", entity.recipients.list_id);
+            let campaignNode = nodeUtil.createPath(rootNode, entity.id, contentType);
+            PropertyUtil.setProperty(campaignNode, "id", entity.id);
+            PropertyUtil.setProperty(campaignNode, "type", entity.type);
+            PropertyUtil.setProperty(campaignNode, "status", entity.status);
 
-        let settingsNode = nodeUtil.createPath(campaignNode, "settings", "mgnl:contentNode");
-        PropertyUtil.setProperty(settingsNode, "title", entity.settings.title);
-        PropertyUtil.setProperty(settingsNode, "subject_line", entity.settings.subject_line);
-        PropertyUtil.setProperty(settingsNode, "from_name", entity.settings.from_name);
-        PropertyUtil.setProperty(settingsNode, "to_name", entity.settings.to_name);
+            let recipientsNode = nodeUtil.createPath(campaignNode, "recipients", "mgnl:contentNode");
+            PropertyUtil.setProperty(recipientsNode, "list_id", entity.recipients.list_id);
 
-        nodeTypesUtil.Activatable.update(campaignNode, "Import", true);
-    });
+            let settingsNode = nodeUtil.createPath(campaignNode, "settings", "mgnl:contentNode");
+            PropertyUtil.setProperty(settingsNode, "title", entity.settings.title);
+            PropertyUtil.setProperty(settingsNode, "subject_line", entity.settings.subject_line);
+            PropertyUtil.setProperty(settingsNode, "from_name", entity.settings.from_name);
+            PropertyUtil.setProperty(settingsNode, "to_name", entity.settings.to_name);
+
+            let res = restClient.invoke("getContent", {"id": entity.id});
+            let body = JSON.parse(res.getEntity());
+            if (body.html) {
+                PropertyUtil.setProperty(campaignNode, "content", body.html);
+            } else if (body.plain_text) {
+                PropertyUtil.setProperty(campaignNode, "content", body.plain_text);
+            }
+
+            nodeTypesUtil.Activatable.update(campaignNode, "Import", true);
+        });
+    } finally {
+        restClient.close();
+    }
 }
 
 var ImportListItems = function(items, session, rootNode, contentType) {

@@ -301,6 +301,7 @@ subApps:
     label: subapp.import.audience.name
     class: info.magnolia.ui.contentapp.configuration.BrowserDescriptor
     closable: true
+    icon: icon-import
     datasource:
       class: info.magnolia.ui.datasource.jcr.JcrDatasourceDefinition
       workspace: mailchimp
@@ -726,6 +727,12 @@ subApps:
           dateFormat: "yyyy-MM-dd"
           time: true
           timeFormat: "HH:mm:ss"
+
+        content:
+          $type: codeField
+          label: subapp.campaign.detail.content
+          language: html
+          readOnly: true
     
     actions:
       cancel:

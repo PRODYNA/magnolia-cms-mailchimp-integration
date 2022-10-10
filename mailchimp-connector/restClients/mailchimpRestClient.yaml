@@ -7,7 +7,6 @@ securitySchemes:
     password: !env ${MAILCHIMP_API_KEY}
 
 restCalls:
-
   addList:
     path: "lists"
     method: POST

@@ -1,4 +1,4 @@
-loadScript("/mailchimp-connector/backendScripts/js/utils.js");
+loadScript("/mailchimp-connector/backendScripts/utils.js");
 
 var ExecuteBatchSubscribe = function () {
     var propertyUtil = Java.type("info.magnolia.jcr.util.PropertyUtil");
@@ -8,7 +8,7 @@ var ExecuteBatchSubscribe = function () {
     let nodeUtil = utils.getNodeUtil();
     let MgnlContext = Java.type("info.magnolia.context.MgnlContext");
     let Notification = Java.type("com.vaadin.ui.Notification");
-    let session = MgnlContext.getJCRSession(jcrWorkspace);
+    let session = MgnlContext.getJCRSession("mailchimp");
 
     this.execute = function () {
         var csvUuid = propertyUtil.getString(this.content, "csvDoc");
