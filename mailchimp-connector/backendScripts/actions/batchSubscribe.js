@@ -2,12 +2,9 @@ loadScript("/mailchimp-connector/backendScripts/utils.js");
 
 var ExecuteBatchSubscribe = function () {
     var propertyUtil = Java.type("info.magnolia.jcr.util.PropertyUtil");
-    var standardCharsets = Java.type("java.nio.charset.StandardCharsets");
-    var ioUtils = Java.type("org.apache.commons.io.IOUtils");
     let utils = new Utils();
     let nodeUtil = utils.getNodeUtil();
     let MgnlContext = Java.type("info.magnolia.context.MgnlContext");
-    let Notification = Java.type("com.vaadin.ui.Notification");
     let session = MgnlContext.getJCRSession("mailchimp");
 
     this.execute = function () {
@@ -16,11 +13,14 @@ var ExecuteBatchSubscribe = function () {
         var nodeType = this.parameters.get("nodeType");
         var nodeName = this.content.toString().replace("/","");
         var node = nodeUtil.createPath(session.getRootNode(), nodeName, nodeType);
+        let Notification = Java.type("com.vaadin.ui.Notification");
 
         try {
             if(damfn.getAssetForId(csvUuid).getMimeType() !== "text/csv") {
                 throw "Invalid file type, the expected file type is csv."
             }
+            var standardCharsets = Java.type("java.nio.charset.StandardCharsets");
+            var ioUtils = Java.type("org.apache.commons.io.IOUtils");
             var inByteArrayInputStream = damfn.getAssetForId(csvUuid).getContentStream();
             var stringifiedFile = ioUtils.toString(inByteArrayInputStream, standardCharsets.UTF_8);
             var csvMembers = [];
