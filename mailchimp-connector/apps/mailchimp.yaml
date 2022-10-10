@@ -8,7 +8,7 @@ label: app.name
 
 subApps:
   campaigns:
-    label: subapp.campaigns.name
+    label: subapp.campaigns.label
     class: info.magnolia.ui.contentapp.configuration.BrowserDescriptor
     subAppClass: info.magnolia.ui.contentapp.ContentBrowserSubApp
     icon: icon-messages-app
@@ -163,7 +163,7 @@ subApps:
           restCallSuffix: Campaign
 
   lists:
-    label: subapp.lists.name
+    label: subapp.lists.label
     icon: icon-personas-app
     class: info.magnolia.ui.contentapp.configuration.BrowserDescriptor
     subAppClass: info.magnolia.ui.contentapp.ContentBrowserSubApp
@@ -298,7 +298,7 @@ subApps:
           restCallSuffix: List
 
   importAudience:
-    label: subapp.import.audience.name
+    label: subapp.import.audience.label
     class: info.magnolia.ui.contentapp.configuration.BrowserDescriptor
     closable: true
     icon: icon-import
@@ -420,7 +420,7 @@ subApps:
           textInputAllowed: true
 
   importCampaigns:
-    label: subapp.import.campaigns.name
+    label: subapp.import.campaigns.label
     class: info.magnolia.ui.contentapp.detail.DetailDescriptor
     itemProvider:
       $type: jcrNodeFromLocationProvider
@@ -466,7 +466,7 @@ subApps:
               describeBy: '$.settings.subject_line'
 
   importLists:
-    label: subapp.import.lists.name
+    label: subapp.import.lists.label
     icon: icon-import
     class: info.magnolia.ui.contentapp.detail.DetailDescriptor
     itemProvider:
@@ -514,7 +514,7 @@ subApps:
               describeBy: '$.name'
 
   listDetail:
-    label: subapp.list.detail.name
+    label: subapp.list.detail.label
     icon: icon-configuration-app
     class: info.magnolia.ui.contentapp.detail.DetailDescriptor
     closeable: true
@@ -646,7 +646,7 @@ subApps:
               required: true
 
   campaignDetail:
-    label: subapp.campaign.detail.name
+    label: subapp.campaign.detail.label
     icon: icon-configuration-app
     class: info.magnolia.ui.contentapp.detail.DetailDescriptor
     datasource:
