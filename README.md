@@ -13,7 +13,7 @@ For this light integration the following techniques have been used:
 
 ## Functionality Overview
 The functionality contains the following:
-- Embeded sign-up form: The Mailchimp form to be added/embeded as a component in a page.
+- Embedded sign-up form: The Mailchimp form to be added/embedded as a component in a page.
 
 A content app that allows the user to manage campaigns and lists:
 - Create, update, delete campaigns and lists
@@ -26,7 +26,7 @@ All data is originated from Mailchimp, so that makes Mailchimp the single source
 ## Features
 
 * A Mailchimp list resource `REST Client` is configured
-* A sign-up form component is configured in a away, that can be used to embed sign-up forms from your Mailchimp lists in pages
+* A sign-up form component is configured in a way, that can be used to embed sign-up forms from your Mailchimp lists in pages
 
 ## Setup
 
@@ -41,7 +41,7 @@ The module requires the following parameters configured as environmental variabl
 | Mailchimp Username. Any applicable value is acceptable. Use a custom value to distinguish between installations and/or assist during potential error tracking/troubleshooting when contacting Mailchimp support. | MAILCHIMP_USERNAME | public-1 |
 | The API key provided by Mailchimp. | MAILCHIMP_API_KEY | 0128901f0adc-us10 |
 
-Additionally you must set the `magnolia.yaml.envsubst` feature flag (JVM option) to `true`, in order for the variable values to be replaced. (Refer to [Environment Variables](https://docs.magnolia-cms.com/product-docs/6.2/Administration/Architecture/Configuration-management.html#_environment_variables))
+Additionally, you must set the `magnolia.yaml.envsubst` feature flag (JVM option) to `true`, in order for the variable values to be replaced. (Refer to [Environment Variables](https://docs.magnolia-cms.com/product-docs/6.2/Administration/Architecture/Configuration-management.html#_environment_variables))
 
 ---
 
@@ -55,7 +55,7 @@ Additionally you must set the `magnolia.yaml.envsubst` feature flag (JVM optio
 
 ---
 
-# Signup Form Component
+# Sign-up Form Component
 
 Import the component to your pages by using a custom decorator.
 
@@ -68,17 +68,17 @@ areas:
         id: mailchimp-connector:components/signupForm/signupForm
 ```
 
-![Usage in signup form component](/_dev/add-component.jpg "Add Signup Form Component")
+![Usage in signup form component](/_dev/add-component.jpg "Add Sign-up Form Component")
 ![Usage in signup form component](/_dev/select-audience.jpg "Select audience destination")
-![Usage in signup form component](/_dev/form-component.jpg "Signup Form Component")
+![Usage in signup form component](/_dev/form-component.jpg "Sign-up Form Component")
 
-_Tip: To modify the look & feel of your subscribe forms login to your Mailchimp account, navigate to Audiences and click on Signup Forms menu item._
+_Tip: To modify the look & feel of your subscribe forms login to your Mailchimp account, navigate to Audiences and click on Sign-up Forms menu item._
 
 # Mailchimp Content App
-A Content App that contains two tabs, exist in the application. The tabs are Campaigns and Lists, that allow the user to perform some actions on the respective Mailchimp entity.
+A content app that contains two tabs, exist in the application. The tabs are Campaigns and Lists, that allow the user to perform some actions on the respective Mailchimp entity.
 
 ## Campaigns Tab
-The Campaings tab, shows a list of Campaigns:
+The Campaigns tab, shows a list of Campaigns:
 ![[campaign-browser.png]]
 The following Actions are available:
 1. Import Campaigns From Mailchimp
@@ -105,11 +105,11 @@ The confirm button will import this data from Mailchimp to JCR and the respectiv
 ![[import-campaign-notification.png]]
 
 ### Action: Add/Edit Campaign
-When selecting the Add/Edit Action, the user is promted to fill the form with the following information.
+When selecting the Add/Edit Action, the user is prompted to fill the form with the following information.
 ![[add-campaign.png]]
 When the Confirm button is clicked, the form information is saved on JCR.
 
-### Action: Delete Campaing
+### Action: Delete Campaign
 When a Campaign is selected, the Delete action will remove it from the JCR. The respective notification will be displayed.
 ![[delete-campaign.png]]
 
@@ -140,7 +140,7 @@ The confirm button will import this data from Mailchimp to JCR and the respectiv
 ![[import-lists-notification.png]]
 
 ### Action: Add/Edit List
-When selecting the Add/Edit Action, the user is promted to fill the form with the following information.
+When selecting the Add/Edit Action, the user is prompted to fill the form with the following information.
 ![[add-list.png]]
 ![[add-list2.png]]
 When the Save Changes button is clicked, the form information is saved on JCR.
@@ -172,13 +172,13 @@ For every item of the Import Audience browser, the following information is disp
 When the action is clicked a new SubApp is displayed. The user can add the information of the form as shown below
 ![[create-batch-import.png]]
 
-The Import Name must be unique. Additionally the CSV file must have the correct format, as shown in the sample below *(the header must be email_address and below must be the list of emails)*. ![[sample_csv.csv]]
+The Import Name must be unique. Additionally, the CSV file must have the correct format, as shown in the sample below *(the header must be email_address and below must be the list of emails)*. ![[sample_csv.csv]]
 #### Action: Execute Batch Subscribe
 When an item of the browser is selected and the action is clicked, the content of the csv file is sent to Mailchimp in order to subscribe emails to the list.
 
 
 ## Sync to Mailchimp Status
-An important piece of information for Campaings and List entities is the Sync Status. This information is visible on the Campaigns browser and the Lists brower and can have one of the following statuses:
+An important piece of information for Campaigns and List entities is the Sync Status. This information is visible on the Campaigns browser and the Lists browser and can have one of the following statuses:
 - Red: The JCR information of the selected item, does not exist in Mailchimp.
 - Yellow: The JCR information (previously imported from Mailchimp), has been modified. This information is not the same as the Mailchimp respective information.
 - Green: The JCR information of the selected item is the same as the Mailchimp respective information.
