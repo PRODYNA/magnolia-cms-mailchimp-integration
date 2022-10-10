@@ -2,21 +2,22 @@ loadScript("/mailchimp-connector/backendScripts/utils.js");
 
 var DeleteNode = function () {
     let utils = new Utils();
-    let nodeUtil = utils.getNodeUtil();
-    let magnoliaContext = Java.type("info.magnolia.context.MgnlContext");
-    let propertyUtil = Java.type("info.magnolia.jcr.util.PropertyUtil");
     let notification = Java.type("com.vaadin.ui.Notification");
-    let SUCCESS_DELETION_MESSAGE = 'Node was successfully deleted';
-    let FAILURE_DELETION_MESSAGE = 'Node Deletion from Mailchimp failed: ';
+    const SUCCESS_DELETION_MESSAGE = 'Node was successfully deleted';
+    const FAILURE_DELETION_MESSAGE = 'Node Deletion from Mailchimp failed: ';
+    const NOTIFICATION_DELAY = 5000;
 
     function deleteFromJCR(identifier) {
+        let nodeUtil = utils.getNodeUtil();
+        let magnoliaContext = Java.type("info.magnolia.context.MgnlContext");
         let session = magnoliaContext.getJCRSession(this.parameters.get("workspace"));
         nodeUtil.getNodeByIdentifier(this.parameters.get("workspace"), identifier).remove();
         session.save();
-        notification.show(SUCCESS_DELETION_MESSAGE, notification.Type.HUMANIZED_MESSAGE).setDelayMsec(5000);
+        notification.show(SUCCESS_DELETION_MESSAGE, notification.Type.HUMANIZED_MESSAGE).setDelayMsec(MESSAGE_DELAY);
     }
 
     this.execute = function () {
+        let propertyUtil = Java.type("info.magnolia.jcr.util.PropertyUtil");
         let restClient = utils.getRestClient("mailchimpRestClient");
         try {
             let identifier = propertyUtil.getString(this.content, "jcr:uuid");
@@ -31,17 +32,17 @@ var DeleteNode = function () {
                     try {
                         var responseMailchimpError = JSON.parse(res.getEntity()).detail;
                         if (responseMailchimpError) {
-                            notification.show(FAILURE_DELETION_MESSAGE + responseMailchimpError, notification.Type.ERROR_MESSAGE).setDelayMsec(5000);
+                            notification.show(FAILURE_DELETION_MESSAGE + responseMailchimpError, notification.Type.ERROR_MESSAGE).setDelayMsec(NOTIFICATION_DELAY);
                         }
                     } catch (err) {
-                        notification.show(FAILURE_DELETION_MESSAGE + statusInfo.getReasonPhrase(), notification.Type.ERROR_MESSAGE).setDelayMsec(5000);
+                        notification.show(FAILURE_DELETION_MESSAGE + statusInfo.getReasonPhrase(), notification.Type.ERROR_MESSAGE).setDelayMsec(NOTIFICATION_DELAY);
                     }
                 }
             } else {
                 deleteFromJCR.call(this, identifier);
             }
         }  catch (err) {
-            notification.show(FAILURE_DELETION_MESSAGE + err, notification.Type.ERROR_MESSAGE).setDelayMsec(5000);
+            notification.show(FAILURE_DELETION_MESSAGE + err, notification.Type.ERROR_MESSAGE).setDelayMsec(NOTIFICATION_DELAY);
         } finally {
             restClient.close();
         }

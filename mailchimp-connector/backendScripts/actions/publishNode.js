@@ -2,12 +2,8 @@ loadScript("/mailchimp-connector/backendScripts/utils.js");
 
 var publishNode = function () {
     let utils = new Utils();
-    let NodeUtil = utils.getNodeUtil();
-    let NodeTypeUtil = utils.getNodeTypes();
     let restClient = utils.getRestClient("mailchimpRestClient");
-    let MgnlContext = Java.type("info.magnolia.context.MgnlContext");
     let PropertyUtil = Java.type("info.magnolia.jcr.util.PropertyUtil");
-    let Notification = Java.type("com.vaadin.ui.Notification");
 
     function CampaignRequest(content) {
         return {
@@ -61,13 +57,16 @@ var publishNode = function () {
     }
 
     function saveToJCR(node, session) {
+        let NodeTypeUtil = utils.getNodeTypes();
         NodeTypeUtil.Activatable.update(node, "Magnolia Mailchimp App", true);
         session.save();
     }
 
     this.execute = function () {
+        let NodeUtil = utils.getNodeUtil();
         let nodeIdentifier = PropertyUtil.getString(this.content, "jcr:uuid");
         let node = NodeUtil.getNodeByIdentifier(this.parameters.get("workspace"), nodeIdentifier);
+        let MgnlContext = Java.type("info.magnolia.context.MgnlContext");
         let session = MgnlContext.getJCRSession(this.parameters.get("workspace"));
         let requestObject;
         let scheduleAt;
@@ -88,6 +87,7 @@ var publishNode = function () {
         }
         let restCall = restCallPrefix + this.parameters.get("restCallSuffix");
 
+        let Notification = Java.type("com.vaadin.ui.Notification");
         try {
             let response = restClient.invoke(restCall, requestObject);
             let responseStatus = response.getStatusInfo();
