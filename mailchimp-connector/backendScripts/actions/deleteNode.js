@@ -13,7 +13,7 @@ var DeleteNode = function () {
         let session = magnoliaContext.getJCRSession(this.parameters.get("workspace"));
         nodeUtil.getNodeByIdentifier(this.parameters.get("workspace"), identifier).remove();
         session.save();
-        notification.show(SUCCESS_DELETION_MESSAGE, notification.Type.HUMANIZED_MESSAGE).setDelayMsec(MESSAGE_DELAY);
+        notification.show(SUCCESS_DELETION_MESSAGE, notification.Type.HUMANIZED_MESSAGE).setDelayMsec(NOTIFICATION_DELAY);
     }
 
     this.execute = function () {

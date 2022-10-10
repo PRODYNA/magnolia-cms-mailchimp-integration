@@ -77,6 +77,7 @@ var ImportListItems = function(items, session, rootNode, contentType) {
 }
 
 var ImportNodes = function () {
+    const NOTIFICATION_DELAY = 5000;
     let utils = new Utils();
     let MgnlContext = Java.type("info.magnolia.context.MgnlContext");
     this.execute = function () {
@@ -102,7 +103,7 @@ var ImportNodes = function () {
                 } else {
                     throw "Unrecognized content type " + contentType;
                 }
-                Notification.show("Nodes imported successfully.", Notification.Type.HUMANIZED_MESSAGE).setDelayMsec(5000);
+                Notification.show("Nodes imported successfully.", Notification.Type.HUMANIZED_MESSAGE).setDelayMsec(NOTIFICATION_DELAY);
             }
             if(this.content && this.content.isNode() && session.nodeExists(this.content.getPath())) {
                 session.getItem(this.content.getPath()).remove();
