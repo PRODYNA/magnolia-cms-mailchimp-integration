@@ -1,10 +1,10 @@
 loadScript("/mailchimp-connector/backendScripts/utils.js");
 
 var ExecuteBatchSubscribe = function () {
-    var propertyUtil = Java.type("info.magnolia.jcr.util.PropertyUtil");
     let utils = new Utils();
+    let propertyUtil = utils.getPropertyUtil();
     let nodeUtil = utils.getNodeUtil();
-    let MgnlContext = Java.type("info.magnolia.context.MgnlContext");
+    let MgnlContext = utils.getMgnlContext();
     let session = MgnlContext.getJCRSession("mailchimp");
 
     this.execute = function () {

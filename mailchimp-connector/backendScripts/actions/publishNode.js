@@ -3,7 +3,7 @@ loadScript("/mailchimp-connector/backendScripts/utils.js");
 var publishNode = function () {
     let utils = new Utils();
     let restClient = utils.getRestClient("mailchimpRestClient");
-    let PropertyUtil = Java.type("info.magnolia.jcr.util.PropertyUtil");
+    let PropertyUtil = utils.getPropertyUtil();
 
     function CampaignRequest(content) {
         return {
@@ -66,7 +66,7 @@ var publishNode = function () {
         let NodeUtil = utils.getNodeUtil();
         let nodeIdentifier = PropertyUtil.getString(this.content, "jcr:uuid");
         let node = NodeUtil.getNodeByIdentifier(this.parameters.get("workspace"), nodeIdentifier);
-        let MgnlContext = Java.type("info.magnolia.context.MgnlContext");
+        let MgnlContext = utils.getMgnlContext();
         let session = MgnlContext.getJCRSession(this.parameters.get("workspace"));
         let requestObject;
         let scheduleAt;

@@ -4,7 +4,7 @@ var ImportCampaignItems = function(items, session, rootNode, contentType) {
     let utils = new Utils();
     let nodeUtil = utils.getNodeUtil();
     let nodeTypesUtil = utils.getNodeTypes();
-    let PropertyUtil = Java.type("info.magnolia.jcr.util.PropertyUtil");
+    let PropertyUtil = utils.getPropertyUtil();
     let restClient;
     try {
         restClient = utils.getRestClient("mailchimpRestClient");
@@ -46,7 +46,7 @@ var ImportListItems = function(items, session, rootNode, contentType) {
     let utils = new Utils();
     let nodeUtil = utils.getNodeUtil();
     let nodeTypesUtil = utils.getNodeTypes();
-    let PropertyUtil = Java.type("info.magnolia.jcr.util.PropertyUtil");
+    let PropertyUtil = utils.getPropertyUtil();
     items.forEach(entity => {
         if(session.nodeExists("/" + entity.id)) {
             session.getItem("/" + entity.id).remove();
@@ -79,7 +79,7 @@ var ImportListItems = function(items, session, rootNode, contentType) {
 var ImportNodes = function () {
     const NOTIFICATION_DELAY = 5000;
     let utils = new Utils();
-    let MgnlContext = Java.type("info.magnolia.context.MgnlContext");
+    let MgnlContext = utils.getMgnlContext();
     this.execute = function () {
         let restClient;
         let session = MgnlContext.getJCRSession(this.parameters.get("workspace"));

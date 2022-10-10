@@ -1,6 +1,8 @@
 var Utils = function () {
     var NodeUtil = Java.type("info.magnolia.jcr.util.NodeUtil");
     var NodeTypes = Java.type("info.magnolia.jcr.util.NodeTypes");
+    var PropertyUtil = Java.type("info.magnolia.jcr.util.PropertyUtil");
+    var MgnlContext = Java.type("info.magnolia.context.MgnlContext");
 
     /**
      * exposedComponents:
@@ -27,5 +29,13 @@ var Utils = function () {
      */
     this.getNodeTypes = function () {
         return NodeTypes;
+    }
+
+    this.getPropertyUtil = function() {
+        return PropertyUtil;
+    }
+
+    this.getMgnlContext = function() {
+        return MgnlContext;
     }
 }

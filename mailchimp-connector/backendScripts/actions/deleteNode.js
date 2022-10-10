@@ -17,7 +17,7 @@ var DeleteNode = function () {
     }
 
     this.execute = function () {
-        let propertyUtil = Java.type("info.magnolia.jcr.util.PropertyUtil");
+        let propertyUtil = utils.getPropertyUtil();
         let restClient = utils.getRestClient("mailchimpRestClient");
         try {
             let identifier = propertyUtil.getString(this.content, "jcr:uuid");
