@@ -107,23 +107,23 @@ var publishNode = function () {
                             scheduleCampaign(responseBody.id, scheduleAt);
                             PropertyUtil.setProperty(node, "scheduled", true);
                             saveToJCR(node, session);
-                            Notification.show("Node published successfully to Mailchimp", Notification.Type.HUMANIZED_MESSAGE).setDelayMsec(5000);
+                            Notification.show("Node published successfully to Mailchimp", Notification.Type.HUMANIZED_MESSAGE).setDelayMsec(utils.getNotificationDelay());
                         } catch (err) {
-                            Notification.show("Failed to publish node with error " + err, Notification.Type.ERROR_MESSAGE).setDelayMsec(5000);
+                            Notification.show("Failed to publish node with error " + err, Notification.Type.ERROR_MESSAGE).setDelayMsec(utils.getNotificationDelay());
                         }
                     } else {
                         saveToJCR(node, session);
-                        Notification.show("Node published successfully to Mailchimp", Notification.Type.HUMANIZED_MESSAGE).setDelayMsec(5000);
+                        Notification.show("Node published successfully to Mailchimp", Notification.Type.HUMANIZED_MESSAGE).setDelayMsec(utils.getNotificationDelay());
                     }
                 } else {
                     saveToJCR(node, session);
-                    Notification.show("Node published successfully to Mailchimp", Notification.Type.HUMANIZED_MESSAGE).setDelayMsec(5000);
+                    Notification.show("Node published successfully to Mailchimp", Notification.Type.HUMANIZED_MESSAGE).setDelayMsec(utils.getNotificationDelay());
                 }
             } else {
                 try {
-                    Notification.show("Failed to publish node with error " + responseBody.detail, Notification.Type.ERROR_MESSAGE).setDelayMsec(5000);
+                    Notification.show("Failed to publish node with error " + responseBody.detail, Notification.Type.ERROR_MESSAGE).setDelayMsec(utils.getNotificationDelay());
                 } catch (err) {
-                    Notification.show("Failed to publish node with unknown error, API response is " + responseStatus.getReasonPhrase(), Notification.Type.ERROR_MESSAGE).setDelayMsec(5000);
+                    Notification.show("Failed to publish node with unknown error, API response is " + responseStatus.getReasonPhrase(), Notification.Type.ERROR_MESSAGE).setDelayMsec(utils.getNotificationDelay());
                 }
             }
         } catch(err) {

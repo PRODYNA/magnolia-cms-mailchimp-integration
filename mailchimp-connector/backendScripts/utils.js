@@ -3,30 +3,16 @@ var Utils = function () {
     var NodeTypes = Java.type("info.magnolia.jcr.util.NodeTypes");
     var PropertyUtil = Java.type("info.magnolia.jcr.util.PropertyUtil");
     var MgnlContext = Java.type("info.magnolia.context.MgnlContext");
+    const NOTIFICATION_DELAY = 5000;
 
-    /**
-     * exposedComponents:
-     *    restClientFactory:
-     *        componentClass: info.magnolia.rest.client.factory.RestClientFactory
-     *        name: restClientFactory
-     *    restClientRegistry:
-     *        componentClass: info.magnolia.rest.client.registry.RestClientRegistry
-     *        name: restClientRegistry
-     * */
     this.getRestClient= function(clientName) {
         return restClientFactory.createClient(restClientRegistry.getProvider(clientName).get());
     }
 
-    /**
-     * @see https://nexus.magnolia-cms.com/content/sites/magnolia.public.sites/ref/6.1/apidocs/info/magnolia/jcr/util/NodeUtil.html
-     */
     this.getNodeUtil = function () {
         return NodeUtil;
     }
 
-    /**
-     * @see https://nexus.magnolia-cms.com/content/sites/magnolia.public.sites/ref/6.1/apidocs/info/magnolia/jcr/util/NodeTypes.html
-     */
     this.getNodeTypes = function () {
         return NodeTypes;
     }
@@ -37,5 +23,9 @@ var Utils = function () {
 
     this.getMgnlContext = function() {
         return MgnlContext;
+    }
+
+    this.getNotificationDelay = function() {
+        return NOTIFICATION_DELAY;
     }
 }

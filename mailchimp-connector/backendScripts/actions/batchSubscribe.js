@@ -16,7 +16,7 @@ var ExecuteBatchSubscribe = function () {
         let Notification = Java.type("com.vaadin.ui.Notification");
 
         try {
-            if(damfn.getAssetForId(csvUuid).getMimeType() !== "text/csv") {
+            if(damfn.getAssetForId(csvUuid).getMimeType() != "text/csv") {
                 throw "Invalid file type, the expected file type is csv."
             }
             var standardCharsets = Java.type("java.nio.charset.StandardCharsets");
@@ -66,9 +66,9 @@ var ExecuteBatchSubscribe = function () {
             session.save();
 
             if(responseStatus == "failure") {
-                Notification.show("Could not import contacts to Mailchimp.", Notification.Type.ERROR_MESSAGE);
+                Notification.show("Could not import contacts to Mailchimp.", Notification.Type.ERROR_MESSAGE, utils.getNotificationDelay());
             } else {
-                Notification.show("Successfully added contacts to Mailchimp.", Notification.Type.HUMANIZED_MESSAGE);
+                Notification.show("Successfully added contacts to Mailchimp.", Notification.Type.HUMANIZED_MESSAGE, utils.getNotificationDelay());
             }
         } catch(error) {
             console.log(error);
