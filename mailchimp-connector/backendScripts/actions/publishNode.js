@@ -82,7 +82,7 @@ var publishNode = function () {
         }
 
         let restCallPrefix = requestObject.id ? "edit" : "add";
-        if (restCallPrefix === "add") {
+        if (restCallPrefix == "add") {
             delete requestObject.id;
         }
         let restCall = restCallPrefix + this.parameters.get("restCallSuffix");

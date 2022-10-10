@@ -95,10 +95,9 @@ var ImportNodes = function () {
             if (body.hasOwnProperty(bodyProperty)) {
                 let items = body[bodyProperty];
                 let contentType = this.parameters.get("contentModel");
-
-                if (contentType ==="mlchmp:campaign") {
+                if (contentType == "mlchmp:campaign") {
                     ImportCampaignItems(items, session, rootNode, contentType);
-                } else if (contentType === "mlchmp:list") {
+                } else if (contentType == "mlchmp:list") {
                     ImportListItems(items, session, rootNode, contentType);
                 } else {
                     throw "Unrecognized content type " + contentType;
