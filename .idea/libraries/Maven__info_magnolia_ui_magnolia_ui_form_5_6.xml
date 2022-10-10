@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: info.magnolia.ui:magnolia-ui-form:5.6">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/info/magnolia/ui/magnolia-ui-form/5.6/magnolia-ui-form-5.6.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/info/magnolia/ui/magnolia-ui-form/5.6/magnolia-ui-form-5.6-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/info/magnolia/ui/magnolia-ui-form/5.6/magnolia-ui-form-5.6-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

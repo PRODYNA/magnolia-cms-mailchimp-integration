@@ -1,9 +1,9 @@
 # magnolia-cms-mailchimp-integration
-A magnolia cms light module to integrate with mailchimp.
+A Magnolia CMS light module to integrate with Mailchimp.
 
 The `mailchimp-connector` directory is a light module that you can use in your project.
 
-The module requires Magnolia DXCore. Tested on Magnolia 6.2.17.
+The module requires Magnolia DX Core. Tested with Magnolia CMS 6.2.17.
 
 For this light integration the following techniques have been used:
 - [Rest Client Module](https://docs.magnolia-cms.com/product-docs/6.2/Modules/List-of-modules/REST-Client-module.html)
@@ -12,33 +12,33 @@ For this light integration the following techniques have been used:
 
 ## Functionality Overview
 The functionality contains the following:
-- Embeded Sign Up Form: The mailchimp form to be added/embeded as a component in a page.
+- Embeded sign-up form: The Mailchimp form to be added/embeded as a component in a page.
 
-Content App that allows the user to manage campaigns and lists:
-- Create, Update, Delete Campaigns and Lists.
-- Synchronize and Schedule Campaigns
-- Synchronize Lists information with Mailchimp.
-- Batch import of new emails in a List.
+A content app that allows the user to manage campaigns and lists:
+- Create, update, delete campaigns and lists
+- Synchronize and schedule campaigns
+- Synchronize lists information
+- Batch import of new email accounts to a list
 
-The system that owns the data is Mailchimp. This means that Mailchimp contains all the information and when it comes to the integration with this Magnolia solution. 
+The system that owns the data is Mailchimp. This means that Mailchimp contains all the information and when it comes to the integration with this Magnolia solution.
 
 ## Features
 
-* A Mailchimp List Resource `REST Client` is configured.
-* A signup form component is configured that can be used to embed signup forms from your Mailchimp lists on your pages.
+* A Mailchimp list resource `REST Client` is configured
+* A sign-up form component is configured in a away, that can be used to embed sign-up forms from your Mailchimp lists in pages
 
 ## Setup
 
-_A Mailchimp account(Essentials pricing plan) with an active API key is required for this integration. For configuration of the Mailchimp account and generation of the API key refer to [Mailchimp Documentation](https://mailchimp.com/developer/marketing/guides/quick-start/#create-an-account)._
+_A Mailchimp account (Essentials pricing plan) with an active API key is required for this integration. For configuration of the Mailchimp account and generation of the API key refer to [Mailchimp Documentation](https://mailchimp.com/developer/marketing/guides/quick-start/#create-an-account)._
 
-* Download and install the light module in a DXCore instance.
+* Download and install the light module in a DX Core instance
 
 The module requires the following parameters configured as environmental variables available to your server:
-| Description  | Key | Sample Value  |
+| Description | Key | Sample Value |
 |---|---|---|
-| [Mailchimp Server Prefix](https://mailchimp.com/developer/marketing/guides/quick-start/#make-your-first-api-call) | MAILCHIMP_SERVER_PREFIX  |  us10 |
+| [Mailchimp Server Prefix](https://mailchimp.com/developer/marketing/guides/quick-start/#make-your-first-api-call) | MAILCHIMP_SERVER_PREFIX | us10 |
 | Mailchimp Username. Any applicable value is acceptable. Use a custom value to distinguish between installations and/or assist during potential error tracking/troubleshooting when contacting Mailchimp support. | MAILCHIMP_USERNAME | public-1 |
-| The API key provided by Mailchimp. | MAILCHIMP_API_KEY  | 0128901f0adc-us10 |
+| The API key provided by Mailchimp. | MAILCHIMP_API_KEY | 0128901f0adc-us10 |
 
 Additionally you must set the `magnolia.yaml.envsubst` feature flag (JVM option) to `true`, in order for the variable values to be replaced. (Refer to [Environment Variables](https://docs.magnolia-cms.com/product-docs/6.2/Administration/Architecture/Configuration-management.html#_environment_variables))
 
@@ -54,7 +54,7 @@ Additionally you must set the `magnolia.yaml.envsubst` feature flag (JVM optio
 
 ---
 
-# Signup Form Component 
+# Signup Form Component
 
 Import the component to your pages by using a custom decorator.
 
@@ -98,13 +98,13 @@ For every Campaign, the following information is displayed:
 - Sync Status (refer to [[#Sync to Mailchimp Status]])
 
 ### Action: Import Campaign
-When the action Import Campaign From Mailchimp is selected, then a SubApp will open. The SubApp contains a list of Campaigns saved to Mailchimp. 
+When the action Import Campaign From Mailchimp is selected, then a SubApp will open. The SubApp contains a list of Campaigns saved to Mailchimp.
 ![[import-campaign.png]]
 The confirm button will import this data from Mailchimp to JCR and the respective notification will be displayed.
 ![[import-campaign-notification.png]]
 
 ### Action: Add/Edit Campaign
-When selecting the Add/Edit Action, the user is promted to fill the form with the following information. 
+When selecting the Add/Edit Action, the user is promted to fill the form with the following information.
 ![[add-campaign.png]]
 When the Confirm button is clicked, the form information is saved on JCR.
 
@@ -133,13 +133,13 @@ For every List(Audience), the following information is displayed:
 - Sync Status (refer to [[#Sync to Mailchimp Status]])
 
 ### Action: Import Lists
-When the action Import Campaign From Mailchimp is selected, then a SubApp will open. The SubApp contains a list of Lists(Audiences) saved to Mailchimp. 
+When the action Import Campaign From Mailchimp is selected, then a SubApp will open. The SubApp contains a list of Lists(Audiences) saved to Mailchimp.
 ![[import-lists.png]]
 The confirm button will import this data from Mailchimp to JCR and the respective notification will be displayed.
 ![[import-lists-notification.png]]
 
 ### Action: Add/Edit List
-When selecting the Add/Edit Action, the user is promted to fill the form with the following information. 
+When selecting the Add/Edit Action, the user is promted to fill the form with the following information.
 ![[add-list.png]]
 ![[add-list2.png]]
 When the Save Changes button is clicked, the form information is saved on JCR.
@@ -155,7 +155,7 @@ This action synchronizes the local JCR data with Mailchimp.
 When the action is clicked, a new tab Import Audience is displayed.
 
 ### Import Audience
-The tab Import Audience allows the user to create a connection between (existing or new) CSV files of a specific format and a List of Mailchimp. Every item of the Import Audience shows this connection between CSV and List. After the connection has been created, the item can be selected in order the emails of the CSV to be imported to the specified mailchimp List.
+The tab Import Audience allows the user to create a connection between (existing or new) CSV files of a specific format and a List of Mailchimp. Every item of the Import Audience shows this connection between CSV and List. After the connection has been created, the item can be selected in order the emails of the CSV to be imported to the specified Mailchimp List.
 ![[import-audience.png]]
 The following Actions are available:
 1. Create Import Audience Job (CSV) - visible when no items of the browser is clicked
@@ -168,12 +168,12 @@ For every item of the Import Audience browser, the following information is disp
 - Status
 
 #### Action: Create Import Audience Job (CSV)
-When the action is clicked a new SubApp is displayed. The user can add the information of the form as shown below 
+When the action is clicked a new SubApp is displayed. The user can add the information of the form as shown below
 ![[create-batch-import.png]]
 
 The Import Name must be unique. Additionally the CSV file must have the correct format, as shown in the sample below *(the header must be email_address and below must be the list of emails)*. ![[sample_csv.csv]]
 #### Action: Execute Batch Subscribe
-When an item of the browser is selected and the action is clicked, the content of the csv file is sent to mailchimp in order to subscribe emails to the list.
+When an item of the browser is selected and the action is clicked, the content of the csv file is sent to Mailchimp in order to subscribe emails to the list.
 
 
 ## Sync to Mailchimp Status

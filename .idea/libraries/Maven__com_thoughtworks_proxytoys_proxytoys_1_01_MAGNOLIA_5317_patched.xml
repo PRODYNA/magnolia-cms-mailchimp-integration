@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: com.thoughtworks.proxytoys:proxytoys:1.01-MAGNOLIA-5317-patched">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/com/thoughtworks/proxytoys/proxytoys/1.01-MAGNOLIA-5317-patched/proxytoys-1.01-MAGNOLIA-5317-patched.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/com/thoughtworks/proxytoys/proxytoys/1.01-MAGNOLIA-5317-patched/proxytoys-1.01-MAGNOLIA-5317-patched-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/com/thoughtworks/proxytoys/proxytoys/1.01-MAGNOLIA-5317-patched/proxytoys-1.01-MAGNOLIA-5317-patched-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

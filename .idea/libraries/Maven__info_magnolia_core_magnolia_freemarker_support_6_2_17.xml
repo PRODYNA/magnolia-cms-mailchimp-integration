@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: info.magnolia.core:magnolia-freemarker-support:6.2.17">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/info/magnolia/core/magnolia-freemarker-support/6.2.17/magnolia-freemarker-support-6.2.17.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/info/magnolia/core/magnolia-freemarker-support/6.2.17/magnolia-freemarker-support-6.2.17-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/info/magnolia/core/magnolia-freemarker-support/6.2.17/magnolia-freemarker-support-6.2.17-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
