@@ -178,7 +178,7 @@ When the action is clicked a new SubApp is displayed. The user can add the infor
 
 The Import Name must be unique. Additionally, the CSV file must have the correct format, as shown in the sample below *(the header must be email_address and below must be the list of emails)*. 
 
-[Sample CSV](./dev/sample_csv.csv)
+[Sample CSV](./_dev/sample_csv.csv)
 
 #### Action: Execute Batch Subscribe
 When an item of the browser is selected and the action is clicked, the content of the csv file is sent to Mailchimp in order to subscribe emails to the list.
