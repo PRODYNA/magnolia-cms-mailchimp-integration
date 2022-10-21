@@ -66,16 +66,19 @@ var ExecuteBatchSubscribe = function () {
             session.save();
 
             if(responseStatus == "failure") {
-                Notification.show("Could not import contacts to Mailchimp.", Notification.Type.ERROR_MESSAGE, utils.getNotificationDelay());
+                Notification.show("Could not import contacts to Mailchimp.", Notification.Type.ERROR_MESSAGE)
+                    .setDelayMsec(utils.getNotificationDelay());
             } else {
-                Notification.show("Successfully added contacts to Mailchimp.", Notification.Type.HUMANIZED_MESSAGE, utils.getNotificationDelay());
+                Notification.show("Successfully added contacts to Mailchimp.", Notification.Type.HUMANIZED_MESSAGE)
+                    .setDelayMsec(utils.getNotificationDelay());
             }
         } catch(error) {
             console.log(error);
             let node = nodeUtil.createPath(session.getRootNode(), nodeName, nodeType);
             propertyUtil.setProperty(node, "status", "failure");
             session.save();
-            Notification.show(error, Notification.Type.ERROR_MESSAGE);
+            Notification.show(error, Notification.Type.ERROR_MESSAGE)
+                .setDelayMsec(utils.getNotificationDelay());
         }
     }
 }
