@@ -101,7 +101,8 @@ var ImportNodes = function () {
                 } else {
                     throw "Unrecognized content type " + contentType;
                 }
-                Notification.show("Nodes imported successfully.", Notification.Type.HUMANIZED_MESSAGE).setDelayMsec(utils.getNotificationDelay());
+                Notification.show("Nodes imported successfully.", Notification.Type.HUMANIZED_MESSAGE)
+                    .setDelayMsec(utils.getNotificationDelay());
             }
             if(this.content && this.content.isNode() && session.nodeExists(this.content.getPath())) {
                 session.getItem(this.content.getPath()).remove();

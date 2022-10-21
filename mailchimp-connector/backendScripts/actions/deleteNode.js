@@ -2,7 +2,7 @@ loadScript("/mailchimp-connector/backendScripts/utils.js");
 
 var DeleteNode = function () {
     let utils = new Utils();
-    let notification = Java.type("com.vaadin.ui.Notification");
+    let Notification = Java.type("com.vaadin.ui.Notification");
     const SUCCESS_DELETION_MESSAGE = 'Node was successfully deleted';
     const FAILURE_DELETION_MESSAGE = 'Node Deletion from Mailchimp failed: ';
 
@@ -12,7 +12,8 @@ var DeleteNode = function () {
         let session = magnoliaContext.getJCRSession(this.parameters.get("workspace"));
         nodeUtil.getNodeByIdentifier(this.parameters.get("workspace"), identifier).remove();
         session.save();
-        notification.show(SUCCESS_DELETION_MESSAGE, notification.Type.HUMANIZED_MESSAGE).setDelayMsec(utils.getNotificationDelay());
+        Notification.show(SUCCESS_DELETION_MESSAGE, Notification.Type.HUMANIZED_MESSAGE)
+            .setDelayMsec(utils.getNotificationDelay());
     }
 
     this.execute = function () {
@@ -31,17 +32,20 @@ var DeleteNode = function () {
                     try {
                         var responseMailchimpError = JSON.parse(res.getEntity()).detail;
                         if (responseMailchimpError) {
-                            notification.show(FAILURE_DELETION_MESSAGE + responseMailchimpError, notification.Type.ERROR_MESSAGE).setDelayMsec(utils.getNotificationDelay());
+                            Notification.show(FAILURE_DELETION_MESSAGE + responseMailchimpError, Notification.Type.ERROR_MESSAGE)
+                                .setDelayMsec(utils.getNotificationDelay());
                         }
                     } catch (err) {
-                        notification.show(FAILURE_DELETION_MESSAGE + statusInfo.getReasonPhrase(), notification.Type.ERROR_MESSAGE).setDelayMsec(utils.getNotificationDelay());
+                        Notification.show(FAILURE_DELETION_MESSAGE + statusInfo.getReasonPhrase(), Notification.Type.ERROR_MESSAGE)
+                            .setDelayMsec(utils.getNotificationDelay());
                     }
                 }
             } else {
                 deleteFromJCR.call(this, identifier);
             }
         }  catch (err) {
-            notification.show(FAILURE_DELETION_MESSAGE + err, notification.Type.ERROR_MESSAGE).setDelayMsec(utils.getNotificationDelay());
+            Notification.show(FAILURE_DELETION_MESSAGE + err, Notification.Type.ERROR_MESSAGE)
+                .setDelayMsec(utils.getNotificationDelay());
         } finally {
             restClient.close();
         }
