@@ -10,7 +10,7 @@ form:
       datasource:
         name: rest
         $type: jsonDatasource
-        restClient: "Mailchimp List API Resource"
+        restClient: "mailchimpRestClient"
         restCall: getLists
         jsonPathExpressions:
           itemId: "$.subscribe_url_long"

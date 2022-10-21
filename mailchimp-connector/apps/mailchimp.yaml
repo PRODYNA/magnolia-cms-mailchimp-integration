@@ -4,7 +4,7 @@ class: info.magnolia.ui.contentapp.configuration.ContentAppDescriptor
 label: app.name
 
 subApps:
-  campaigns:
+  browser:
     label: subapp.campaigns.label
     class: info.magnolia.ui.contentapp.configuration.BrowserDescriptor
     subAppClass: info.magnolia.ui.contentapp.ContentBrowserSubApp
