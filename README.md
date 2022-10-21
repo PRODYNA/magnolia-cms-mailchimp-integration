@@ -21,7 +21,7 @@ A content app that allows the user to manage campaigns and lists:
 - Synchronize lists information
 - Batch import of new email accounts to a list
 
-All data is originated from Mailchimp, so that makes Mailchimp the single source of truth. For this reason the synchronization functionality is used for Campaigns and Lists and the [Mailchimp Status](#Sync to Mailchimp Status) is used at the respective content apps.
+All data is originated from Mailchimp, so that makes Mailchimp the single source of truth. For this reason the synchronization functionality is used for Campaigns and Lists and the [Mailchimp Status](#sync-to-mailchimp-status) is used at the respective content apps.
 
 ## Features
 
@@ -98,7 +98,7 @@ For every Campaign, the following information is displayed:
 - List ID
 - Schedule Date
 - Campaign Status
-- Sync Status (refer to [Sync Mailchimp Status](#Sync to Mailchimp Status))
+- Sync Status (refer to [Sync Mailchimp Status](#sync-to-mailchimp-status))
 
 ### Action: Import Campaign
 When the action Import Campaign From Mailchimp is selected, then a SubApp will open. The SubApp contains a list of Campaigns saved to Mailchimp.
@@ -134,7 +134,7 @@ For every List(Audience), the following information is displayed:
 - List ID
 - Name
 - Members
-- Sync Status (refer to [Sync Mailchimp Status](#Sync to Mailchimp Status))
+- Sync Status (refer to [Sync Mailchimp Status](#sync-to-mailchimp-status))
 
 ### Action: Import Lists
 When the action Import Campaign From Mailchimp is selected, then a SubApp will open. The SubApp contains a list of Lists(Audiences) saved to Mailchimp.
@@ -176,7 +176,7 @@ For every item of the Import Audience browser, the following information is disp
 When the action is clicked a new SubApp is displayed. The user can add the information of the form as shown below
 ![Create Batch Import](/_dev/create-batch-import.png "Create Batch Import")
 
-The Import Name must be unique. Additionally, the CSV file must have the correct format, as shown in the sample below *(the header must be email_address and below must be the list of emails)*. 
+The Import Name must be unique. Additionally, the CSV file must have the correct format, as shown in the sample below *(the header must be email_address and below must be the list of emails)*.
 
 [Sample CSV](./_dev/sample_csv.csv)
 
@@ -184,7 +184,7 @@ The Import Name must be unique. Additionally, the CSV file must have the correct
 When an item of the browser is selected and the action is clicked, the content of the csv file is sent to Mailchimp in order to subscribe emails to the list.
 
 
-## Sync to Mailchimp Status
+### Sync to Mailchimp Status
 An important piece of information for Campaigns and List entities is the Sync Status. This information is visible on the Campaigns browser and the Lists browser and can have one of the following statuses:
 - Red: The JCR information of the selected item, does not exist in Mailchimp.
 - Yellow: The JCR information (previously imported from Mailchimp), has been modified. This information is not the same as the Mailchimp respective information.
