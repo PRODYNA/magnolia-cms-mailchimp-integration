@@ -116,7 +116,7 @@ When a Campaign is selected, the Delete action will remove it from the JCR. The 
 ![Delete Campaign](/_dev/delete-campaign.png "Delete Campaign")
 
 ### Action: Sync to Mailchimp
-This action Schedules the selected campaign.
+This action synchronizes the local JCR data with Mailchimp.
 
 ## Lists Tab
 The Lists tab, shows a list of Lists(Audiences).
