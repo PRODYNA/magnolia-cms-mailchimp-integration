@@ -34,6 +34,33 @@ restCalls:
           '
     securityScheme: mailchimpApiAuthorization
 
+  editList:
+    path: "lists/{id}"
+    method: PATCH
+    entityClass: com.fasterxml.jackson.databind.JsonNode
+    securityScheme: mailchimpApiAuthorization
+    body: '
+      {
+        "name" : "{name}",
+        "contact" : {
+          "company" : "{company}",
+          "address1" : "{address1}",
+          "city" : "{city}",
+          "state" : "{state}",
+          "zip" : "{zip}",
+          "country" : "{country}"
+        },
+        "permission_reminder" : "{permission_reminder}",
+        "campaign_defaults" : {
+          "from_name" : "{from_name}",
+          "from_email" : "{from_email}",
+          "subject" : "{subject}",
+          "language" : "{language}"
+        },
+        "email_type_option" : {email_type_option}
+      }
+    '
+
   getLists:
     path: "lists"
     method: GET
