@@ -734,12 +734,6 @@ subApps:
           dateFormat: "yyyy-MM-dd"
           time: true
           timeFormat: "HH:mm:ss"
-
-        content:
-          $type: codeField
-          label: subapp.campaign.detail.content
-          language: html
-          readOnly: true
     
     actions:
       cancel:
