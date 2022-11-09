@@ -13,7 +13,8 @@ var publishNode = function () {
             subject_line: PropertyUtil.getString(content, "settings/subject_line"),
             title: PropertyUtil.getString(content, "settings/title"),
             to_name: PropertyUtil.getString(content, "settings/to_name"),
-            from_name: PropertyUtil.getString(content, "settings/from_name")
+            from_name: PropertyUtil.getString(content, "settings/from_name"),
+            reply_to: PropertyUtil.getString(content, "settings/reply_to")
         };
     }
 

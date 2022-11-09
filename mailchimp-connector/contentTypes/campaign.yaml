@@ -27,5 +27,6 @@ model:
       properties:
         - name: from_name
         - name: subject_line
+        - name: reply_to
         - name: to_name
         - name: title
