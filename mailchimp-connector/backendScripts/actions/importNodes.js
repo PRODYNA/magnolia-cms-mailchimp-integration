@@ -26,6 +26,7 @@ var ImportCampaignItems = function(items, session, rootNode, contentType) {
             PropertyUtil.setProperty(settingsNode, "subject_line", entity.settings.subject_line);
             PropertyUtil.setProperty(settingsNode, "from_name", entity.settings.from_name);
             PropertyUtil.setProperty(settingsNode, "to_name", entity.settings.to_name);
+            PropertyUtil.setProperty(settingsNode, "reply_to", entity.settings.reply_to);
 
             let res = restClient.invoke("getContent", {"id": entity.id});
             let body = JSON.parse(res.getEntity());

@@ -708,6 +708,15 @@ subApps:
               description: subapp.campaign.detail.settings.to.description
               required: true
               defaultValue: ""
+            reply_to:
+              $type: textField
+              label: subapp.campaign.detail.settings.replyto.label
+              description: subapp.campaign.detail.settings.replyto.description
+              required: true
+              validators:
+                email:
+                  $type: emailValidator
+                  errorMessage: subapp.campaign.detail.settings.replyto.error
             from_name:
               $type: textField
               label: subapp.campaign.detail.settings.from.label

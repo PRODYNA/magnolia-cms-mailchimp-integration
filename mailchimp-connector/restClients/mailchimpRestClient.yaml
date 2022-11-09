@@ -138,7 +138,8 @@ restCalls:
             "subject_line": "{subject_line}",
             "title": "{title}",
             "from_name": "{from_name}",
-            "to_name": "{to_name}"
+            "to_name": "{to_name}",
+            "reply_to" : "{reply_to}"
           }
         }'
     securityScheme: mailchimpApiAuthorization
@@ -157,7 +158,8 @@ restCalls:
                         "subject_line": "{subject_line}",
                         "title": "{title}",
                         "from_name": "{from_name}",
-                        "to_name": "{to_name}" 
+                        "to_name": "{to_name}",
+                        "reply_to" : "{reply_to}"
                       }
                 }'
     securityScheme: mailchimpApiAuthorization
